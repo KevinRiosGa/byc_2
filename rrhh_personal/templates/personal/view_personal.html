@@ -13,7 +13,9 @@
         <h3>Información personal</h3>
         <tr>
             <td><label for="rut">Rut</label></td>
-            <td><input type="text" name="rut" id="rut" value="{{ usuario.rut }}-{{ usuario.dvrut }}" readonly></td>
+            <td><input type="text" name="rut" id="rut" value="{{ usuario.rut }}" readonly></td>
+            <td><label for="rut">-</label></td>
+            <td><input type="text" name="rut" id="rut" value="{{ usuario.dvrut }}" readonly></td>
         </tr>
         <tr>
             <td><label for="nombre">Nombre:</label></td>
