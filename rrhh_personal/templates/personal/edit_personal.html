@@ -1,0 +1,109 @@
+{% extends 'home/index.html' %}
+
+{% block title %}Formulario de ingreso de personal{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+
+
+<style>
+    input[disabled], select[disabled] {
+        background-color: #f0f0f0;  /* Color de fondo gris claro */
+        color: #ccc;  /* Color del texto gris */
+        cursor: not-allowed;  /* Cambia el cursor a una cruz */
+    }
+</style>
+
+<h1>Edición de personal</h1>
+<div>
+    <form method="POST" id="personal-form">
+        {% csrf_token %}
+        <a href="{% url 'table_personal' %}">Volver</a>
+        <table>
+            <!-- Campos de Personal -->
+            <h3>Información personal</h3>
+            <tr>
+                <td><label for="{{ form.rut.id_for_label }}">Rut</label></td>
+                <td>{{ form.rut }} - {{ form.dvrut }}</td>
+            <tr>
+                <td><label for="{{ form.nombre.id_for_label }}">Nombre</label></td>
+                <td>{{ form.nombre }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.apepat.id_for_label }}">Apellido Paterno</label></td>
+                <td>{{ form.apepat }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.apemat.id_for_label }}">Apellido Materno</label></td>
+                <td>{{ form.apemat }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.sexo_id.id_for_label }}">Sexo</label></td>
+                <td>{{ form.sexo_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.fechanac.id_for_label }}">Fecha de nacimiento</label></td>
+                <td>{{ form.fechanac }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.estcivil_id.id_for_label }}">Estado civil</label></td>
+                <td>{{ form.estcivil_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.correo.id_for_label }}">Correo electrónico</label></td>
+                <td>{{ form.correo }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.region_id.id_for_label }}">Región</label></td>
+                <td>{{ form.region_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.comuna_id.id_for_label }}">Comuna</label></td>
+                <td>{{ form.comuna_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.direccion.id_for_label }}">Dirección</label></td>
+                <td>{{ form.direccion }}</td>
+            </tr>
+        </table>
+        <table>     
+            <!-- Campos de InfoLaboral -->
+            <h3>Información laboral</h3>
+            <tr>
+                <td><label for="{{ laboral_form.depto_id.id_for_label }}">Departamento</label></td>
+                <td>{{ laboral_form.depto_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ laboral_form.cargo_id.id_for_label }}">Cargo</label></td>
+                <td>{{ laboral_form.cargo_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ laboral_form.empresa_id.id_for_label }}">Empresa</label></td>
+                <td>{{ laboral_form.empresa_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ laboral_form.fechacontrata.id_for_label }}">Fecha de ingreso</label></td>
+                <td>{{ laboral_form.fechacontrata }}</td>
+            </tr>
+        </table>
+    
+        {% if form.non_field_errors %}
+            <div>
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    
+        <div>
+            <!-- Botón para editar -->
+            <button type="button" id="btn_editar">Editar</button>
+            <!-- Botón para guardar cambios (oculto inicialmente) -->
+            <button type="submit" id="btn_guardar" style="display:none;">Guardar cambios</button>
+        </div>
+    </form>
+    <script src="{% static 'js/edit_personal.js' %}" ></script>
+
+{% endblock %}

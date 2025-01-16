@@ -1,0 +1,102 @@
+
+
+{% extends 'home/index.html' %}
+
+{% block title %}Formulario de ingreso de personal{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<h1>Formulario de ingreso de personal</h1>
+<div>
+    <form action="#" method="POST" id="personal-form">
+        {% csrf_token %}
+        <a href="{% url 'table_personal' %}">Volver</a>
+        <table>
+
+            <h3>Información personal</h3>
+            <tr>
+                <td><label for="{{ form.rut.id_for_label }}">Rut</label>
+                    <label for="{{ form.dvrut.id_for_label }}"></label>
+                </td>
+                <td>{{ personal_form.rut }} - {{ personal_form.dvrut }}</td>
+    
+            </tr>
+            <tr>
+                <td><label for="{{ form.nombre.id_for_label }}">Nombre</label></td>
+                <td>{{ personal_form.nombre }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.apepat.id_for_label }}">Apellido Paterno</label></td>
+                <td>{{ personal_form.apepat }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.apemat.id_for_label }}">Apellido Materno</label></td>
+                <td>{{ personal_form.apemat }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.sexo_id.id_for_label }}">Sexo</label></td>
+                <td>{{ personal_form.sexo_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.fechanac.id_for_label }}">Fecha de nacimiento</label></td>
+                <td>{{ personal_form.fechanac }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.estcivil_id.id_for_label }}">Estado civil</label></td>
+                <td>{{ personal_form.estcivil_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.correo.id_for_label }}">Correo electrónico</label></td>
+                <td>{{ personal_form.correo }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.region_id.id_for_label }}">Región</label></td>
+                <td>{{ personal_form.region_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.comuna_id.id_for_label }}">Comuna</label></td>
+                <td>{{ personal_form.comuna_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.direccion.id_for_label }}">Dirección</label></td>
+                <td>{{ personal_form.direccion }}</td>
+            </tr>
+        </table>
+        <h3>Información laboral</h3>
+        <table>
+            <tr>
+                <td><label for="{{ form.direccion.id_for_label }}">Empresa</label></td>
+                <td>{{ laboral_form.empresa_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.direccion.id_for_label }}">Departamento</label></td>
+                <td>{{ laboral_form.depto_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.direccion.id_for_label }}">Cargo</label></td>
+                <td>{{ laboral_form.cargo_id }}</td>
+            </tr>
+            <tr>
+                <td><label for="{{ form.direccion.id_for_label }}">Fecha Inicio Contrato</label></td>
+                <td>{{ laboral_form.fechacontrata }}</td>
+            </tr>
+        </table>
+    
+        {% if form.non_field_errors %}
+            <div>
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+            <div>
+                <button type="submit" class="boton-guardar">Guardar</button>
+            </div>
+        
+    </form>
+    <script src="{% static 'js/create_personal.js' %}"></script>
+</div>
+
+{% endblock %}

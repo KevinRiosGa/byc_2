@@ -1,0 +1,93 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Inicio{% endblock %}</title>
+  </head>
+  <body>
+    <div>
+        <!-- Contenido de la barra lateral -->
+        <nav>
+            <div>
+                <span>
+                    <img src="{% static 'img/logo_icranes.svg' %}" alt="logo" class="logo mb-3">
+                </span>
+            </div>
+            <a href="{% url 'home' %}">
+                <span>
+                    <i class="bi bi-house-fill"></i>
+                </span>
+                <span>Inicio</span>
+            </a>
+            <a href="#">
+                <span class="icon">
+                    <i class="bi bi-people-fill"></i>
+                </span>
+                <span>Recursos Humanos</span>
+            </a>
+            <div id="submenu1">
+                <a href="{% url 'table_personal' %}">
+                    <span>
+                        <i class="bi bi-people-fill"></i>
+                    </span>
+                    <span>Tabla de personal</span>
+                </a>
+                <a href="#">
+                    <span>
+                        <i class="bi bi-table"></i>
+                    </span>
+                    <span>Ausentismo</span>
+                </a>
+            </div>
+            <a href="#">
+                <span>
+                    <i class="bi bi-tools"></i>
+                </span>
+                <span>Maquinarias</span>
+            </a>
+            <div id="submenu2">
+                <a href="#">
+                    <span>
+                        <i class="bi bi-plus-circle"></i>
+                    </span>
+                    <span>Nueva maquinaria</span>
+                </a>
+                <a href="#">
+                    <span>
+                        <i class="bi bi-1-circle"></i>
+                    </span>
+                    <span>Nueva maquinaria</span>
+                </a>
+            </div>
+            <a href="#">
+                <span>
+                    <i class="bi bi-gear-fill"></i>
+                </span>
+                <span>Configuraciones</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Contenido principal -->
+    <main>
+        <div>
+            <div>
+                <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <span>
+                    <i class="bi bi-box-arrow-left"></i>
+                </span>
+                <button type="submit">Cerrar sesión</button>
+                </form>
+            </div>
+        </div>
+        {% block content %}
+
+        {% endblock %}
+    </main>
+    
+</body>
+
+</html>

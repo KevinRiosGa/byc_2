@@ -1,0 +1,71 @@
+{% extends 'home/index.html' %}
+{% load static %}
+{% block title %}Listado de Personal{% endblock %}
+
+{% block content %}
+
+<h1>Listado de Personal</h1>
+<a href="{% url 'create_personal' %}">Ingresar personal</a>
+
+<!-- Incluye los estilos de DataTables -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+
+
+<!-- Tabla -->
+<div>
+    <table id="personalTable">
+        <!--boton para crear usuario-->
+        <thead>
+            <tr>
+                <th>Rut</th>
+                <th>Nombre Completo</th>
+                <th>Departamento</th>
+                <th>Cargo</th>
+                <th>Editar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in personal %}
+            <tr>
+                <td>{{ p.rut }}-{{ p.dvrut }}</td>
+                <td>
+                    <span>
+                        <a href="{% url 'detail_personal' pk=p.personal_id %}" class="view-link">{{ p.nombre }} {{ p.apepat }} {{ p.apemat }}</a> 
+                    </span>
+                </td>
+                <td>
+                    {% if p.infolaboral_set.first %}
+                        {{ p.infolaboral_set.first.depto_id.depto }}
+                    {% else %}
+                        No asignado
+                    {% endif %}
+                </td>
+                <td>
+                    {% if p.infolaboral_set.first %}
+                        {{ p.infolaboral_set.first.cargo_id.cargo }}
+                    {% else %}
+                        No asignado
+                    {% endif %}
+                </td>
+                <td>
+                    <span>
+                        <a href="{% url 'edit_personal' pk=p.personal_id %}" class="edit-link"><i class="bi bi-pencil-fill"></i></a>
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Incluye las dependencias de DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css"></script>
+<script href="{% static 'js/table_personal.js' %}"></script>
+{% endblock %}

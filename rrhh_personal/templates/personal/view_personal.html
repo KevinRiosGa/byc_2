@@ -1,0 +1,82 @@
+{% extends 'home/index.html' %}
+{% block title %}Visualización de personal {% endblock %}
+{% block content %}
+{% load static %}
+<div>
+    <h1>Detalle del Usuario</h1>
+    <a href="{% url 'table_personal' %}">Volver</a>
+</div>
+<div>
+<div>
+    <table>
+        <!-- Información Personal -->
+        <h3>Información personal</h3>
+        <tr>
+            <td><label for="rut">Rut</label></td>
+            <td><input type="text" name="rut" id="rut" value="{{ usuario.rut }}-{{ usuario.dvrut }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="nombre">Nombre:</label></td>
+            <td><input type="text" value="{{ usuario.nombre }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="apepat">Apellido Paterno:</label></td>
+            <td><input type="text" value="{{ usuario.apepat }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="apemat">Apellido Materno:</label></td>
+            <td><input type="text" value="{{ usuario.apemat }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="sexo">Sexo:</label></td>
+            <td><input type="text" value="{{ usuario.sexo_id.sexo }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="fechanac">Fecha de nacimiento:</label></td>
+            <td><input type="text" value="{{ usuario.fechanac  }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="estcivil">Estado civil:</label></td>
+            <td><input type="text" value="{{ usuario.estcivil_id.estadocivil  }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="correo">Correo electrónico:</label></td>
+            <td><input type="text" value="{{ usuario.correo  }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="region">Región:</label></td>
+            <td><input type="text" value="{{ usuario.region_id.region  }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="comuna">Comuna:</label></td>
+            <td><input type="text" value="{{ usuario.comuna_id.comuna  }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="direccion">Dirección:</label></td>
+            <td><input type="text" value="{{ usuario.direccion  }}" readonly></td>
+        </tr>
+    </table>
+
+    <table>
+        <!-- Información Laboral -->
+        <h3>Información laboral</h3>
+        <tr>
+            <td><label for="depto">Departamento:</label></td>
+            <td><input type="text" value="{{ info_laboral.depto_id.depto }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="cargo">Cargo:</label></td>
+            <td><input type="text" value="{{ info_laboral.cargo_id.cargo }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="empresa">Empresa:</label></td>
+            <td><input type="text" value="{{ info_laboral.empresa_id.razonSocial }}" readonly></td>
+        </tr>
+        <tr>
+            <td><label for="fechacontrata">Fecha de ingreso:</label></td>
+            <td><input type="text" value="{{ info_laboral.fechacontrata }}" readonly></td>
+        </tr>
+    </table>
+</div>
+</div>
+{% endblock %}
