@@ -157,8 +157,8 @@ class Proveedor(models.Model):
     proveedor_id = models.AutoField(primary_key=True, null=False, blank=False)
     region_id = models.ForeignKey(Region, on_delete=models.CASCADE, db_column='region_id', null=False, blank=False)
     comuna_id = models.ForeignKey(Comuna, on_delete=models.CASCADE, db_column='comuna_id', null=False, blank=False)
-    rut = models.IntegerField(max_length=8, null=False, blank=False)
-    dvRut = models.IntegerField(max_length=1, null=False, blank=False)
+    rut = models.CharField(max_length=8, null=False, blank=False)
+    dvRut = models.CharField(max_length=1, null=False, blank=False)
     razonSocial = models.CharField(max_length=100, null=False, blank=False)
     nombreFant = models.CharField(max_length=100, null=True, blank=True)
     giro = models.CharField(max_length=100, null=False, blank=False)
@@ -211,3 +211,97 @@ class TipoExamen(models.Model):
 class ResultadoExamen(models.Model):
     resultadoEx_id = models.AutoField(primary_key=True, null=False, blank=False)
     resultado = models.CharField(max_length=50, null=False, blank=False)
+
+    def __str__(self):
+        return self.resultado
+    
+    def save(self, *args, **kwargs):
+        self.resultado = self.resultado.upper()
+        super().save(self, *args , **kwargs)
+
+class Examen(models.Model):
+    examen_id = models.AutoField(primary_key=True, null=False, blank=False)
+    tipoEx_id = models.ForeignKey(TipoExamen, on_delete=models.CASCADE, db_column='tipoEx_id', null=False, blank=False)
+    personal_id = models.ForeignKey(Personal, on_delete=models.CASCADE, db_column='personal_id', null=False, blank=False)
+    resultadoEx_id = models.ForeignKey(ResultadoExamen, on_delete=models.CASCADE, db_column='resultadoEx_id', null=False, blank=False)
+    proveedor_id = models.ForeignKey(Proveedor, on_delete=models.CASCADE, db_column='proveedor_id', null=False, blank=False)
+    fechaEmision = models.DateField(null=False, blank=False)
+    fechaVencimiento = models.DateField(null=False, blank=False)
+    rutaDoc = models.CharField(max_length=256, null=False, blank=False)
+    observacion = models.TextField(max_length=250, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.personal_id} - {self.tipoEx_id}"
+    
+    def save(self, *args, **kwargs):
+        self.observacion = self.observacion.upper()
+        super().save(self, *args , **kwargs)
+
+#---------------------------------------------------------------------------------------------
+#CERTIFICACION---------------------------------------------------------------------------------
+
+class TipoCertificacion(models.Model):
+    tipoCertificacion_id = models.AutoField(primary_key=True, null=False, blank=False)
+    tipoCertificacion = models.CharField(max_length=100, null=False, blank=False)
+
+    def __str__(self):
+        return self.tipoCertificacion
+
+    def save(self, *args, **kwargs):
+        self.tipoCertificacion = self.tipoCertificacion.upper()
+        super().save(self, *args, **kwargs)
+
+
+class Certificacion(models.Model):
+    certif_id = models.AutoField(primary_key=True, null=False, blank=False)
+    proveedor_id = models.ForeignKey(Proveedor, on_delete=models.CASCADE, db_column='proveedor_id', null=False, blank=False)
+    tipoCertificacion_id = models.ForeignKey(TipoCertificacion, on_delete=models.CASCADE, db_column='tipoCertificacion_id', null=False, blank=False)
+    personal_id = models.ForeignKey(Personal, on_delete=models.CASCADE, db_column='personal_id', null=False, blank=False) 
+    fechaEmision = models.DateField(null=False, blank=False)
+    fechaVencimiento = models.DateField(null=False, blank=False)
+    rutaDoc = models.FileField(upload_to='Documentos/Certificaciones', null=False, blank=False)
+    observacion = models.TextField(max_length=250, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.personal_id} - {self.tipoCertificacion_id}"
+    
+    def save(self, *args, **kwargs):
+        self.observacion = self.observacion.upper()
+        super().save(self, *args , **kwargs)
+
+#---------------------------------------------------------------------------------------------
+#LICENCIAS-------------------------------------------------------------------------------------
+
+class TipoLicencia(models.Model):
+    tipoLicencia_id = models.AutoField(primary_key=True, null=False, blank=False)
+    tipoLicencia = models.CharField(max_length=100, null=False, blank=False)
+
+    def __str__(self):
+        return self.tipoLicencia
+    
+
+class ClaseLicencia(models.Model):
+    claseLicencia_id = models.AutoField(primary_key=True, null=False, blank=False)
+    tipoLicencia_id = models.ForeignKey(TipoLicencia, on_delete=models.CASCADE, db_column='tipoLicencia_id', null=False, blank=False)
+    claseLicencia = models.CharField(max_length=100, null=False, blank=False)
+
+    def __str__(self):
+        return self.claseLicencia
+    
+
+class LicenciaPorPersonal(models.Model):
+    licenciaPorPersonal_id = models.AutoField(primary_key=True, null=False, blank=False)
+    personal_id = models.ForeignKey(Personal, on_delete=models.CASCADE, db_column='personal_id', null=False, blank=False)
+    tipoLicencia_id = models.ForeignKey(TipoLicencia, on_delete=models.CASCADE, db_column='tipoLicencia_id', null=False, blank=False)
+    claseLicencia_id = models.ForeignKey(ClaseLicencia, on_delete=models.CASCADE, db_column='claseLicencia_id', null=False, blank=False)
+    fechaEmision = models.DateField(null=False, blank=False)
+    fechaVencimiento = models.DateField(null=False, blank=False)
+    rutaDoc = models.FileField(upload_to='Documentos/Licencias', null=False, blank=False)
+    observacion = models.TextField(max_length=250, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.personal_id} - {self.claseLicencia_id}"
+    
+    def save( *args, **kwargs):
+        observacion = observacion.upper()
+        super().save( *args , **kwargs)
