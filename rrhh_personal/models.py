@@ -149,3 +149,65 @@ class Ausentismo(models.Model):
     def __str__(self):
         trabajador = f"{self.personal_id.nombre} {self.personal_id.apepat} {self.personal_id.apemat}"
         return f"{self.tipoausen_id} - {trabajador} ({self.fechaini} a {self.fechafin})"
+
+
+#PROVEEDOR -------------------------------------------------------------------------------------
+
+class Proveedor(models.Model):
+    proveedor_id = models.AutoField(primary_key=True, null=False, blank=False)
+    region_id = models.ForeignKey(Region, on_delete=models.CASCADE, db_column='region_id', null=False, blank=False)
+    comuna_id = models.ForeignKey(Comuna, on_delete=models.CASCADE, db_column='comuna_id', null=False, blank=False)
+    rut = models.IntegerField(max_length=8, null=False, blank=False)
+    dvRut = models.IntegerField(max_length=1, null=False, blank=False)
+    razonSocial = models.CharField(max_length=100, null=False, blank=False)
+    nombreFant = models.CharField(max_length=100, null=True, blank=True)
+    giro = models.CharField(max_length=100, null=False, blank=False)
+    direccion = models.CharField(max_length=100, null=False, blank=False)
+
+
+    def __str__(self):
+        return self.razonSocial
+    
+    def save(self, *args, **kwargs):
+        self.razonSocial = self.razonSocial.upper()
+        self.nombreFant = self.nombreFant.upper()
+        self.giro = self.giro.upper()
+        self.direccion = self.direccion.upper()
+        super().save(self, *args, **kwargs)
+
+
+class TipoClasificacion(models.Model):
+    tipoClasi_id = models.AutoField(primary_key=True, null=False, blank=False)
+    tipo = models.CharField(max_length=50, unique=True, null=False, blank=False)
+
+    def __str__(self):
+        return self.tipo 
+
+    def save(self, *args, **kwargs):
+        self.tipo = self.tipo.upper()
+        super().save(self, *args, **kwargs)
+
+
+class ClasificacionProveedor(models.Model):
+    clasifProv_id = models.AutoField(primary_key=True, null=False, blank=False)
+    tipoClasi_id = models.ForeignKey(TipoClasificacion, on_delete=models.CASCADE, db_column='tipoClasi_id', null=False, blank=False)
+    proveedor_id = models.ForeignKey(Proveedor, on_delete=models.CASCADE, db_column='proveedor_id', null=False, blank=False)
+
+#----------------------------------------------------------------------------------------- 
+
+
+#EXAMENES---------------------------------------------------------------------------------
+class TipoExamen(models.Model):
+    tipoEx_id = models.AutoField(primary_key=True, null=False, blank=False)
+    tipoExamen = models.CharField(max_length=100, null=False, blank=False)
+
+    def __str__(self):
+        return self.tipoExamen
+    
+    def save(self, *args, **kwargs):
+        self.tipoExamen = self.tipoExamen.upper()
+        super().save(self, *args , **kwargs)
+
+class ResultadoExamen(models.Model):
+    resultadoEx_id = models.AutoField(primary_key=True, null=False, blank=False)
+    resultado = models.CharField(max_length=50, null=False, blank=False)
