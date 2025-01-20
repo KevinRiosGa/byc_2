@@ -2,7 +2,7 @@ from django import forms
 from .models import *
 
 
-
+#formulario para la creacion de personas
 class PersonalCreationForm(forms.ModelForm):
 
     class Meta:
@@ -38,7 +38,7 @@ class PersonalCreationForm(forms.ModelForm):
        self.fields['dvrut'].widget.attrs.update({'id': 'id_dvrut'})
        self.fields['dvrut'].widget.attrs.update({'readonly': 'readonly'})
 
-
+#formulario para ingresar la informacion laboral de las personas
 class InfoLaboralPersonalForm(forms.ModelForm):
 
     class Meta:
@@ -53,3 +53,20 @@ class InfoLaboralPersonalForm(forms.ModelForm):
     empresa_id = forms.ModelChoiceField(queryset=Empresa.objects.all(), empty_label='-----------')
     depto_id = forms.ModelChoiceField(queryset=DeptoEmpresa.objects.all(),empty_label='-----------')
     cargo_id = forms.ModelChoiceField(queryset=Cargo.objects.all(),empty_label='-----------')
+
+
+#formularios de licencias --------------------------------------------------------------
+class LicenciasPersonal(forms.ModelForm):
+    class Meta:
+        model = LicenciaPorPersonal
+        fields = ['tipoLicencia_id', 'claseLicencia_id', 'fechaEmision', 'fechaVencimiento', 'rutaDoc','observacion']
+        widgets = {
+            'fechaEmision': forms.DateInput(attrs={'type': 'date'}),
+            'fechaVencimiento': forms.DateInput(attrs={'type': 'date'}),
+            'rutaDoc': forms.FileInput(attrs={'accept': 'application/pdf, image/jpg, image/png'})
+        }
+
+        tipoLicencia_id = forms.ModelChoiceField(queryset=TipoLicencia.objects.all(), empty_label='-----------')
+        claseLicencia_id = forms.ModelChoiceField(queryset=ClaseLicencia.objects.all(), empty_label='-----------')
+
+

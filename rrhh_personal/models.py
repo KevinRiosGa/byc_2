@@ -1,5 +1,19 @@
 from django.db import models
 
+import os
+
+#MODELO PARA RUTAS DE LOS DOCUMENTOS---------------------------------------------------------
+def obtener_ruta_documento(instance, filename):
+    # Define la carpeta dependiendo de algún atributo o tipo de documento
+    if isinstance(instance, LicenciaPorPersonal):
+        # Por ejemplo, si es una licencia, lo guardamos en 'Licencias'
+        return os.path.join('Licencias', filename)
+    elif isinstance(instance, Examen):
+        # Si es un examen, lo guardamos en 'Examenes'
+        return os.path.join('Examenes', filename)
+    else:
+        # Si no es ninguno de los casos anteriores, lo guardamos en la raíz
+        return os.path.join('Otros', filename)
 
 
 # Create your models here.
@@ -296,12 +310,11 @@ class LicenciaPorPersonal(models.Model):
     claseLicencia_id = models.ForeignKey(ClaseLicencia, on_delete=models.CASCADE, db_column='claseLicencia_id', null=False, blank=False)
     fechaEmision = models.DateField(null=False, blank=False)
     fechaVencimiento = models.DateField(null=False, blank=False)
-    rutaDoc = models.FileField(upload_to='Documentos/Licencias', null=False, blank=False)
+    rutaDoc = models.FileField(upload_to=obtener_ruta_documento, null=False, blank=False)
     observacion = models.TextField(max_length=250, null=True, blank=True)
 
     def __str__(self):
         return f"{self.personal_id} - {self.claseLicencia_id}"
     
-    def save( *args, **kwargs):
-        observacion = observacion.upper()
-        super().save( *args , **kwargs)
+
+

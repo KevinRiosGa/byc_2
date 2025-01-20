@@ -2,9 +2,9 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import render,  get_object_or_404
-from .forms import PersonalCreationForm, InfoLaboralPersonalForm
+from .forms import PersonalCreationForm, InfoLaboralPersonalForm, LicenciasPersonal
 from django.shortcuts import redirect
-from .models import Personal, InfoLaboral, Ausentismo, TipoAusentismo
+from .models import Personal, InfoLaboral, Ausentismo, TipoAusentismo, LicenciaPorPersonal
 from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
@@ -69,10 +69,9 @@ class PersonalEditView(LoginRequiredMixin, View):
         self._disable_form_fields(form)
         self._disable_form_fields(laboral_form)
 
-        return render(request, self.template_name, {
-            'form': form,
-            'laboral_form': laboral_form
-        })
+        context = {'form': form, 'laboral_form': laboral_form}
+
+        return render(request, self.template_name, context)
 
     def post(self, request, pk, *args, **kwargs):
         # Obtener el usuario y su información laboral
@@ -86,11 +85,10 @@ class PersonalEditView(LoginRequiredMixin, View):
         if form.is_valid() and laboral_form.is_valid():
             form.save()
             laboral_form.save()
+        
+        context =  {'form': form,'laboral_form': laboral_form}
 
-        return render(request, self.template_name, {
-            'form': form,
-            'laboral_form': laboral_form
-        })
+        return render(request, self.template_name, context)
 
     @staticmethod
     def _disable_form_fields(form):
@@ -99,7 +97,7 @@ class PersonalEditView(LoginRequiredMixin, View):
             field.widget.attrs['disabled'] = 'disabled'
 
 #visualizar detalles del personal
-class UserDetailView(LoginRequiredMixin, View):
+class PersonalDetailView(LoginRequiredMixin, View):
     template_name = 'personal/view_personal.html'
 
     def get(self, request, pk, *args, **kwargs):
@@ -109,3 +107,38 @@ class UserDetailView(LoginRequiredMixin, View):
         context = {'usuario': usuario, 'info_laboral': info_laboral}
 
         return render(request, self.template_name, context)
+
+
+class PersonalLicenceEditView(LoginRequiredMixin, View):
+    template_name = 'personal/LicenceEdit_personal.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        usuario = get_object_or_404(Personal, personal_id=pk)
+        info_laboral = usuario.infolaboral_set.first()
+
+        historial_licencias = LicenciaPorPersonal.objects.filter(personal_id=usuario)
+        form = LicenciasPersonal()
+        context = {'form': form, 'usuario': usuario, 'info_laboral': info_laboral, 'historial_licencias': historial_licencias}
+
+        return render(request, self.template_name, context)
+    
+    def post(self, request, pk, *args, **kwargs):
+        usuario = get_object_or_404(Personal, personal_id=pk)
+        info_laboral = usuario.infolaboral_set.first()
+        form = LicenciasPersonal(request.POST, request.FILES)
+
+        if form.is_valid():
+            licencia = form.save(commit=False)
+            licencia.personal_id = usuario
+            licencia.save()
+            return redirect('personalLicenceEditView', pk=pk)
+        
+        historial_licencias = LicenciaPorPersonal.objects.filter(personal_id=usuario)
+        context = {
+            'form': form,
+            'usuario': usuario,
+            'historial_licencias': historial_licencias,
+            'info_laboral': info_laboral,
+        }
+        return render(request, self.template_name, context)
+        

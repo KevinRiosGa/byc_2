@@ -25,7 +25,7 @@
                 <th>Departamento</th>
                 <th>Cargo</th>
                 <th>Editar</th>
-
+                <th>Licencia</th>
             </tr>
         </thead>
         <tbody>
@@ -56,12 +56,16 @@
                         <a href="{% url 'edit_personal' pk=p.personal_id %}" class="edit-link"><i class="bi bi-pencil-fill"></i></a>
                     </span>
                 </td>
+                <td>
+                    <span>
+                        <a href="{% url 'personalLicenceEditView' pk=p.personal_id %}" class="edit-link"><i class="bi bi-person-vcard-fill"></i></a>
+                    </span>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-
 
 
 <!-- jQuery -->

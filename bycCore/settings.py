@@ -135,3 +135,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # Si tienes una carpeta "static" en tu proyecto
 ]
+
+# Directorio raíz donde se almacenarán todos los archivos subidos
+MEDIA_ROOT = os.path.join(BASE_DIR, 'Documentos')
+
+# URL para acceder a los archivos subidos
+MEDIA_URL = '/Documentos/'
