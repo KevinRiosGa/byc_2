@@ -8,11 +8,11 @@ def obtener_ruta_documento(instance, filename):
     extension = os.path.splitext(filename)[1]
     # Define la carpeta dependiendo de algún atributo o tipo de documento
     if isinstance(instance, LicenciaPorPersonal):
-        nombre_archivo = f"LIC_{instance.personal_id.rut}_{instance.claseLicencia_id.claseLicencia}_{datetime.now().strftime('%Y%m%d')}{extension}"
+        nombre_archivo = f"LIC_{instance.personal_id.rut}_{instance.claseLicencia_id.claseLicencia}_{extension}"
         return os.path.join('Licencias', nombre_archivo)
-    elif isinstance(instance, Examen):
-        # Si es un examen, lo guardamos en 'Examenes'
-        return os.path.join('Examenes', filename)
+    elif isinstance(instance, Certificacion):
+        nombre_archivo = f"CERT_{instance.personal_id.rut}_{instance.tipoCertificacion_id.tipoCertificacion}_{extension}"
+        return os.path.join('Certificaciones', nombre_archivo)
     else:
         # Si no es ninguno de los casos anteriores, lo guardamos en la raíz
         return os.path.join('Otros', filename)
@@ -190,12 +190,6 @@ class Proveedor(models.Model):
     def __str__(self):
         return self.razonSocial
     
-    def save(self, *args, **kwargs):
-        self.razonSocial = self.razonSocial.upper()
-        self.nombreFant = self.nombreFant.upper()
-        self.giro = self.giro.upper()
-        self.direccion = self.direccion.upper()
-        super().save(self, *args, **kwargs)
 
 
 class TipoClasificacion(models.Model):
@@ -205,15 +199,13 @@ class TipoClasificacion(models.Model):
     def __str__(self):
         return self.tipo 
 
-    def save(self, *args, **kwargs):
-        self.tipo = self.tipo.upper()
-        super().save(self, *args, **kwargs)
 
 
 class ClasificacionProveedor(models.Model):
     clasifProv_id = models.AutoField(primary_key=True, null=False, blank=False)
     tipoClasi_id = models.ForeignKey(TipoClasificacion, on_delete=models.CASCADE, db_column='tipoClasi_id', null=False, blank=False)
     proveedor_id = models.ForeignKey(Proveedor, on_delete=models.CASCADE, db_column='proveedor_id', null=False, blank=False)
+
 
 #----------------------------------------------------------------------------------------- 
 
@@ -277,7 +269,7 @@ class Certificacion(models.Model):
     personal_id = models.ForeignKey(Personal, on_delete=models.CASCADE, db_column='personal_id', null=False, blank=False) 
     fechaEmision = models.DateField(null=False, blank=False)
     fechaVencimiento = models.DateField(null=False, blank=False)
-    rutaDoc = models.FileField(upload_to='Documentos/Certificaciones', null=False, blank=False)
+    rutaDoc = models.FileField(upload_to='Certificaciones', null=False, blank=False)
     observacion = models.TextField(max_length=250, null=True, blank=True)
 
     def __str__(self):

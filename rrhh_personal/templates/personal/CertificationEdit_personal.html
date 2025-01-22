@@ -47,8 +47,8 @@
         </tr>
     </thead>
     <tbody>
-        {% if historial_de_certificacion %}
-            {% for certificacion in historial_de_certificacion %}
+        {% if historial_de_certificaciones %}
+            {% for certificacion in historial_de_certificaciones %}
             <tr>
                 <td>{{ certificacion.tipoCertificacion_id }}</td>
            
@@ -60,7 +60,7 @@
     
    
                 {% if certificacion.rutaDoc %}
-                    <td><a href="{{ certification.rutaDoc.url }}" target="_blank">Ver documento</a></td>
+                    <td><a href="{{ certificacion.rutaDoc.url }}" target="_blank">Ver documento</a></td>
                 {% else %}
                     <td>No disponible</td>
                 {% endif %}
