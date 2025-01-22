@@ -1,13 +1,15 @@
 from django.db import models
-
+from datetime import datetime
 import os
+from django.core.files.storage import FileSystemStorage
 
 #MODELO PARA RUTAS DE LOS DOCUMENTOS---------------------------------------------------------
 def obtener_ruta_documento(instance, filename):
+    extension = os.path.splitext(filename)[1]
     # Define la carpeta dependiendo de algún atributo o tipo de documento
     if isinstance(instance, LicenciaPorPersonal):
-        # Por ejemplo, si es una licencia, lo guardamos en 'Licencias'
-        return os.path.join('Licencias', filename)
+        nombre_archivo = f"LIC_{instance.personal_id.rut}_{instance.claseLicencia_id.claseLicencia}_{datetime.now().strftime('%Y%m%d')}{extension}"
+        return os.path.join('Licencias', nombre_archivo)
     elif isinstance(instance, Examen):
         # Si es un examen, lo guardamos en 'Examenes'
         return os.path.join('Examenes', filename)
@@ -15,8 +17,14 @@ def obtener_ruta_documento(instance, filename):
         # Si no es ninguno de los casos anteriores, lo guardamos en la raíz
         return os.path.join('Otros', filename)
 
+#RUTA PARA SOBREESCRIBIR ARCHIVO
+class OverwriteStorage(FileSystemStorage):
+    def get_available_name(self, name, max_length=None):
+        # Elimina el archivo si ya existe
+        if self.exists(name):
+            os.remove(os.path.join(self.location, name))
+        return name
 
-# Create your models here.
 class Sexo(models.Model):
     sexo_id = models.AutoField(primary_key=True, null=False, blank=False)
     sexo = models.CharField(max_length=50, null=False, blank=False)
@@ -261,10 +269,6 @@ class TipoCertificacion(models.Model):
     def __str__(self):
         return self.tipoCertificacion
 
-    def save(self, *args, **kwargs):
-        self.tipoCertificacion = self.tipoCertificacion.upper()
-        super().save(self, *args, **kwargs)
-
 
 class Certificacion(models.Model):
     certif_id = models.AutoField(primary_key=True, null=False, blank=False)
@@ -278,10 +282,7 @@ class Certificacion(models.Model):
 
     def __str__(self):
         return f"{self.personal_id} - {self.tipoCertificacion_id}"
-    
-    def save(self, *args, **kwargs):
-        self.observacion = self.observacion.upper()
-        super().save(self, *args , **kwargs)
+
 
 #---------------------------------------------------------------------------------------------
 #LICENCIAS-------------------------------------------------------------------------------------
@@ -310,7 +311,7 @@ class LicenciaPorPersonal(models.Model):
     claseLicencia_id = models.ForeignKey(ClaseLicencia, on_delete=models.CASCADE, db_column='claseLicencia_id', null=False, blank=False)
     fechaEmision = models.DateField(null=False, blank=False)
     fechaVencimiento = models.DateField(null=False, blank=False)
-    rutaDoc = models.FileField(upload_to=obtener_ruta_documento, null=False, blank=False)
+    rutaDoc = models.FileField(upload_to=obtener_ruta_documento, storage=OverwriteStorage ,null=False, blank=False)
     observacion = models.TextField(max_length=250, null=True, blank=True)
 
     def __str__(self):

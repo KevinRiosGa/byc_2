@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import CreatePersonalView, TablePersonalView, PersonalEditView, PersonalDetailView, PersonalLicenceEditView
+from .views import CreatePersonalView, TablePersonalView, PersonalEditView, PersonalDetailView, PersonalLicenceEditView, PersonalCertificationEditView
 
 
 urlpatterns = [
@@ -11,6 +11,6 @@ urlpatterns = [
     #path para crear personal
     path('personal/<int:pk>/', PersonalEditView.as_view(), name='edit_personal'),
     path('personal/details_<int:pk>/', PersonalDetailView.as_view(), name='detail_personal'),
-    path('personal/<int:pk>/edit_license', PersonalLicenceEditView.as_view(), name='personalLicenceEditView')
-    
+    path('personal/<int:pk>/edit_license', PersonalLicenceEditView.as_view(), name='personalLicenceEditView'),
+    path('personal/<int:pk>/edit_certification', PersonalCertificationEditView.as_view(), name='personalCertificationEditView')
 ]

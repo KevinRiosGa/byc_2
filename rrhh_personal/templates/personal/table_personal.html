@@ -26,6 +26,7 @@
                 <th>Cargo</th>
                 <th>Editar</th>
                 <th>Licencia</th>
+                <th>Certificaciones</th>
             </tr>
         </thead>
         <tbody>
@@ -59,6 +60,11 @@
                 <td>
                     <span>
                         <a href="{% url 'personalLicenceEditView' pk=p.personal_id %}" class="edit-link"><i class="bi bi-person-vcard-fill"></i></a>
+                    </span>
+                </td>
+                <td>
+                    <span>
+                        <a href="{% url 'personalCertificationEditView' pk=p.personal_id %}"><i class="bi bi-patch-check-fill"></i></a>
                     </span>
                 </td>
             </tr>

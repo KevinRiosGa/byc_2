@@ -2,13 +2,14 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import render,  get_object_or_404
-from .forms import PersonalCreationForm, InfoLaboralPersonalForm, LicenciasPersonal
+from .forms import PersonalCreationForm, InfoLaboralPersonalForm, LicenciasPersonal, CertificacionPersonal
 from django.shortcuts import redirect
-from .models import Personal, InfoLaboral, Ausentismo, TipoAusentismo, LicenciaPorPersonal
+from .models import Personal, InfoLaboral, Ausentismo, TipoAusentismo, LicenciaPorPersonal, Certificacion
 from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.views.generic import ListView
+from django.db.models import Max
 # Create your views here.
 
 #Vista para crear usuario
@@ -96,7 +97,7 @@ class PersonalEditView(LoginRequiredMixin, View):
         for field in form.fields.values():
             field.widget.attrs['disabled'] = 'disabled'
 
-#visualizar detalles del personal
+#vista para visualizar detalles del personal
 class PersonalDetailView(LoginRequiredMixin, View):
     template_name = 'personal/view_personal.html'
 
@@ -108,7 +109,7 @@ class PersonalDetailView(LoginRequiredMixin, View):
 
         return render(request, self.template_name, context)
 
-
+#vista para ingresar licencias para el personal
 class PersonalLicenceEditView(LoginRequiredMixin, View):
     template_name = 'personal/LicenceEdit_personal.html'
 
@@ -116,9 +117,12 @@ class PersonalLicenceEditView(LoginRequiredMixin, View):
         usuario = get_object_or_404(Personal, personal_id=pk)
         info_laboral = usuario.infolaboral_set.first()
 
-        historial_licencias = LicenciaPorPersonal.objects.filter(personal_id=usuario)
+        historial_licencias_completos = (
+        LicenciaPorPersonal.objects.filter(personal_id=usuario).order_by('claseLicencia_id').distinct('claseLicencia_id')
+        )
+
         form = LicenciasPersonal()
-        context = {'form': form, 'usuario': usuario, 'info_laboral': info_laboral, 'historial_licencias': historial_licencias}
+        context = {'form': form, 'usuario': usuario, 'info_laboral': info_laboral, 'historial_licencias': historial_licencias_completos}
 
         return render(request, self.template_name, context)
     
@@ -130,6 +134,7 @@ class PersonalLicenceEditView(LoginRequiredMixin, View):
         if form.is_valid():
             licencia = form.save(commit=False)
             licencia.personal_id = usuario
+            LicenciaPorPersonal.objects.filter(personal_id=usuario, claseLicencia_id = licencia.claseLicencia_id).delete()
             licencia.save()
             return redirect('personalLicenceEditView', pk=pk)
         
@@ -142,3 +147,37 @@ class PersonalLicenceEditView(LoginRequiredMixin, View):
         }
         return render(request, self.template_name, context)
         
+
+class PersonalCertificationEditView(LoginRequiredMixin, View):
+    template_name = 'personal/CertificationEdit_personal.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        usuario = get_object_or_404(Personal, personal_id=pk)
+        info_laboral = usuario.infolaboral_set.first()
+
+        form = CertificacionPersonal()
+
+        historial_de_certificaciones = Certificacion.objects.filter(personal_id=usuario)
+        context = {'form': form, 'usuario': usuario, 'info_laboral': info_laboral, 'historial_de_certificaciones': historial_de_certificaciones}
+
+
+        return render(request, self.template_name, context)
+    
+    def post(self, request, pk, *args, **kwargs):
+        usuario = get_object_or_404(Personal, personal_id=pk)
+        info_laboral = usuario.infolaboral_set.first()
+        form = CertificacionPersonal(request.POST, request.FILES)
+
+        if form.is_valid():
+            certificacion = form.save(commit=False)
+            certificacion.personal_id = usuario
+            certificacion.save()
+
+            return redirect('personalCertificationEditView', pk=pk)
+        
+        context = {
+            'form': form,
+            'usuario': usuario,
+            'info_laboral': info_laboral
+        }
+        return render(request, self.template_name, context)

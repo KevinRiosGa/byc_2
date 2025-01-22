@@ -70,3 +70,18 @@ class LicenciasPersonal(forms.ModelForm):
         claseLicencia_id = forms.ModelChoiceField(queryset=ClaseLicencia.objects.all(), empty_label='-----------')
 
 
+
+#formulario para certificacion------------------------------------------------------------  
+class CertificacionPersonal(forms.ModelForm):
+    class Meta:
+        model = Certificacion
+        fields = ['proveedor_id', 'tipoCertificacion_id', 'fechaEmision', 'fechaVencimiento', 'rutaDoc', 'observacion']
+        widgets = {
+            'fechaEmision': forms.DateInput(attrs={'type': 'date'}),
+            'fechaVencimiento': forms.DateInput(attrs={'type':'date'}),
+            'rutaDoc': forms.FileInput(attrs={'accept': 'application/pdf, image/jpg, image/png'}),
+        }
+
+        proveedor_id = forms.ModelChoiceField(queryset=Proveedor.objects.all(), empty_label='-----------')
+        tipoCertificacion_id = forms.ModelChoiceField(queryset=TipoCertificacion.objects.all(), empty_label='-----------')
+        

@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<h2>Formulario de Licencia</h2>
+<h2>Formulario de Certificaciones</h2>
 <h5>{{ usuario.nombre }} {{ usuario.apepat }} {{ usuario.apemat }}</h3><br>
 <a href="{% url 'table_personal' %}">Volver</a>
 
@@ -13,11 +13,11 @@
     <table>
         <tr>
             
-            <td>{{ form.tipoLicencia_id }}</td>
+            <td>{{ form.proveedor_id }}</td>
         </tr>
         <tr>
           
-            <td>{{ form.claseLicencia_id }}</td>
+            <td>{{ form.tipoCertificacion_id }}</td>
         </tr>
         <tr>
             <td>{{ form.fechaEmision }}</td>
@@ -35,11 +35,11 @@
     <button type="submit">Guardar</button>
 </form>
 
-<h2>Licencias Vigentes</h2>
+<h2>Certificaciones Vigentes</h2>
 <table>
     <thead>
         <tr>
-            <th>Clase Licencia</th>
+            <th>Certificacion</th>
             <th>Fecha de emision</th>
             <th>Fecha Vencimiento</th>
             <th>Documento adjunto</th>
@@ -47,26 +47,26 @@
         </tr>
     </thead>
     <tbody>
-        {% if historial_licencias %}
-            {% for licencia in historial_licencias %}
+        {% if historial_de_certificacion %}
+            {% for certificacion in historial_de_certificacion %}
             <tr>
-                <td>{{ licencia.claseLicencia_id }}</td>
+                <td>{{ certificacion.tipoCertificacion_id }}</td>
            
            
-                <td>{{ licencia.fechaEmision }}</td>
+                <td>{{ certificacion.fechaEmision }}</td>
           
           
-                <td>{{ licencia.fechaVencimiento }}</td>
+                <td>{{ certificacion.fechaVencimiento }}</td>
     
    
-                {% if licencia.rutaDoc %}
-                    <td><a href="{{ licencia.rutaDoc.url }}" target="_blank">Ver documento</a></td>
+                {% if certificacion.rutaDoc %}
+                    <td><a href="{{ certification.rutaDoc.url }}" target="_blank">Ver documento</a></td>
                 {% else %}
                     <td>No disponible</td>
                 {% endif %}
         
            
-                <td>{{ licencia.observacion }} </td>
+                <td>{{ certificacion.observacion }} </td>
             </tr>
             {% endfor %}
         {% else %}
