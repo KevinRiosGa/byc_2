@@ -1,0 +1,89 @@
+{% extends 'home/index.html' %}
+
+{% block title %}Formulario de Examenes{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<h2>Formulario de Examenes</h2>
+<h5>{{ usuario.nombre }} {{ usuario.apepat }} {{ usuario.apemat }}</h3><br>
+<a href="{% url 'table_personal' %}">Volver</a>
+
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+        <tr>
+            
+            <td>{{ form.proveedor_id }}</td>
+        </tr>
+        <tr>
+          
+            <td>{{ form.tipoEx_id }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.resultadoEx_id }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.fechaEmision }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.fechaVencimiento }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.rutaDoc }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.observacion }}</td>
+        </tr>
+    </table>
+    <button type="submit">Guardar</button>
+</form>
+
+<h2>Examenes Vigentes</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Examen</th>
+            <th>Proveedor</th>
+            <th>Fecha de emision</th>
+            <th>Fecha Vencimiento</th>
+            <th>Documento adjunto</th>
+            <th>Comentario</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if historial_de_examen %}
+            {% for examen in historial_de_examen %}
+            <tr>
+                <td>{{ examen.tipoEx_id }}</td>
+
+
+                <td>{{ examen.proveedor_id }}</td>
+           
+        
+                <td>{{ examen.fechaEmision }}</td>
+          
+          
+                <td>{{ examen.fechaVencimiento }}</td>
+    
+   
+                {% if examen.rutaDoc %}
+                    <td><a href="{{ examen.rutaDoc.url }}" target="_blank">Ver documento</a></td>
+                {% else %}
+                    <td>No disponible</td>
+                {% endif %}
+        
+           
+                <td>{{ examen.observacion }} </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>No hay datos disponibles</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>  
+{% endblock %}

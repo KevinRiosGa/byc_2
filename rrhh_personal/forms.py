@@ -85,3 +85,20 @@ class CertificacionPersonal(forms.ModelForm):
         proveedor_id = forms.ModelChoiceField(queryset=Proveedor.objects.all(), empty_label='-----------')
         tipoCertificacion_id = forms.ModelChoiceField(queryset=TipoCertificacion.objects.all(), empty_label='-----------')
         
+
+#formulario para examenes
+class ExamenPersonal(forms.ModelForm):
+    class Meta:
+        model = Examen
+        fields = ['tipoEx_id','resultadoEx_id', 'proveedor_id','fechaEmision','fechaVencimiento', 'rutaDoc', 'observacion']
+        widgets = {
+            'fechaEmision' : forms.DateInput(attrs={'type':'date'}),
+            'fechaVencimiento' : forms.DateInput(attrs={'type': 'date'}),
+            'rutaDoc' : forms.FileInput(attrs={'accept': 'application/pdf, image/jpg, image/png'})
+        }
+
+        tipoEx_id = forms.ModelChoiceField(queryset=TipoExamen.objects.all(), empty_label='-----------')
+        resultadoEx_id = forms.ModelChoiceField(queryset=ResultadoExamen.objects.all(), empty_label='-----------')
+        proveedor_id = forms.ModelChoiceField(queryset=Proveedor.objects.all(), empty_label='-----------')
+
+        

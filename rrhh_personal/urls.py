@@ -1,6 +1,5 @@
 from django.urls import path
-from . import views
-from .views import CreatePersonalView, TablePersonalView, PersonalEditView, PersonalDetailView, PersonalLicenceEditView, PersonalCertificationEditView
+from .views import *
 
 
 urlpatterns = [
@@ -9,8 +8,9 @@ urlpatterns = [
     #path para mostrar la tabla del personal
     path('personal_table/', TablePersonalView.as_view(), name='table_personal'),
     #path para crear personal
-    path('personal/<int:pk>/', PersonalEditView.as_view(), name='edit_personal'),
-    path('personal/details_<int:pk>/', PersonalDetailView.as_view(), name='detail_personal'),
+    path('personal/<int:pk>/edit_personal', PersonalEditView.as_view(), name='edit_personal'),
+    path('personal/<int:pk>/detail_personal', PersonalDetailView.as_view(), name='detail_personal'),
     path('personal/<int:pk>/edit_license', PersonalLicenceEditView.as_view(), name='personalLicenceEditView'),
-    path('personal/<int:pk>/edit_certification', PersonalCertificationEditView.as_view(), name='personalCertificationEditView')
+    path('personal/<int:pk>/edit_certification', PersonalCertificationEditView.as_view(), name='personalCertificationEditView'),
+    path('personal/<int:pk>/edit_examen', PersonalExamenEditView.as_view(), name='personalExamenEditView')
 ]

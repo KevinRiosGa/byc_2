@@ -13,6 +13,9 @@ def obtener_ruta_documento(instance, filename):
     elif isinstance(instance, Certificacion):
         nombre_archivo = f"CERT_{instance.personal_id.rut}_{instance.tipoCertificacion_id.tipoCertificacion}_{extension}"
         return os.path.join('Certificaciones', nombre_archivo)
+    elif isinstance(instance, Examen):
+        nombre_archivo = f"EXAM_{instance.personal_id.rut}_{instance.tipoEx_id.tipoExamen}_{extension}"
+        return os.path.join('Examenes', nombre_archivo)
     else:
         # Si no es ninguno de los casos anteriores, lo guardamos en la raíz
         return os.path.join('Otros', filename)
@@ -217,10 +220,7 @@ class TipoExamen(models.Model):
 
     def __str__(self):
         return self.tipoExamen
-    
-    def save(self, *args, **kwargs):
-        self.tipoExamen = self.tipoExamen.upper()
-        super().save(self, *args , **kwargs)
+ 
 
 class ResultadoExamen(models.Model):
     resultadoEx_id = models.AutoField(primary_key=True, null=False, blank=False)
@@ -228,10 +228,7 @@ class ResultadoExamen(models.Model):
 
     def __str__(self):
         return self.resultado
-    
-    def save(self, *args, **kwargs):
-        self.resultado = self.resultado.upper()
-        super().save(self, *args , **kwargs)
+
 
 class Examen(models.Model):
     examen_id = models.AutoField(primary_key=True, null=False, blank=False)
@@ -241,15 +238,13 @@ class Examen(models.Model):
     proveedor_id = models.ForeignKey(Proveedor, on_delete=models.CASCADE, db_column='proveedor_id', null=False, blank=False)
     fechaEmision = models.DateField(null=False, blank=False)
     fechaVencimiento = models.DateField(null=False, blank=False)
-    rutaDoc = models.CharField(max_length=256, null=False, blank=False)
+    rutaDoc = models.FileField(upload_to=obtener_ruta_documento, null=False, blank=False)
     observacion = models.TextField(max_length=250, null=True, blank=True)
 
     def __str__(self):
         return f"{self.personal_id} - {self.tipoEx_id}"
     
-    def save(self, *args, **kwargs):
-        self.observacion = self.observacion.upper()
-        super().save(self, *args , **kwargs)
+
 
 #---------------------------------------------------------------------------------------------
 #CERTIFICACION---------------------------------------------------------------------------------
@@ -269,7 +264,7 @@ class Certificacion(models.Model):
     personal_id = models.ForeignKey(Personal, on_delete=models.CASCADE, db_column='personal_id', null=False, blank=False) 
     fechaEmision = models.DateField(null=False, blank=False)
     fechaVencimiento = models.DateField(null=False, blank=False)
-    rutaDoc = models.FileField(upload_to='Certificaciones', null=False, blank=False)
+    rutaDoc = models.FileField(upload_to=obtener_ruta_documento, null=False, blank=False)
     observacion = models.TextField(max_length=250, null=True, blank=True)
 
     def __str__(self):

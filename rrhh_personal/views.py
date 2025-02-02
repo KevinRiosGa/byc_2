@@ -2,9 +2,9 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import render,  get_object_or_404
-from .forms import PersonalCreationForm, InfoLaboralPersonalForm, LicenciasPersonal, CertificacionPersonal
+from .forms import PersonalCreationForm, InfoLaboralPersonalForm, LicenciasPersonal, CertificacionPersonal, ExamenPersonal
 from django.shortcuts import redirect
-from .models import Personal, InfoLaboral, Ausentismo, TipoAusentismo, LicenciaPorPersonal, Certificacion
+from .models import Personal, InfoLaboral, Ausentismo, TipoAusentismo, LicenciaPorPersonal, Certificacion, Examen
 from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
@@ -181,3 +181,37 @@ class PersonalCertificationEditView(LoginRequiredMixin, View):
             'info_laboral': info_laboral
         }
         return render(request, self.template_name, context)
+    
+class PersonalExamenEditView(LoginRequiredMixin, View):
+    template_name = 'personal/ExamenEdit_personal.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        usuario = get_object_or_404(Personal, personal_id=pk)
+        info_laboral = usuario.infolaboral_set.first()
+
+        form = ExamenPersonal()
+
+        historial_de_examen = Examen.objects.filter(personal_id=usuario)
+        context = {'form': form, 'usuario': usuario, 'info_laboral': info_laboral, 'historial_de_examen': historial_de_examen}
+
+
+        return render(request, self.template_name, context)
+    
+    def post(self, request, pk, *args, **kwargs):
+        usuario = get_object_or_404(Personal, personal_id=pk)
+        info_laboral = usuario.infolaboral_set.first()
+        form = ExamenPersonal(request.POST, request.FILES)
+
+        if form.is_valid():
+            certificacion = form.save(commit=False)
+            certificacion.personal_id = usuario
+            certificacion.save()
+
+            return redirect('personalExamenEditView', pk=pk)
+        
+        context = {
+            'form': form,
+            'usuario': usuario,
+            'info_laboral': info_laboral
+        }
+        return render(request, self.template_name, context)    
