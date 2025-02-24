@@ -12,24 +12,22 @@
     {% csrf_token %}
     <table>
         <tr>
-            
-            <td>{{ form.tipoLicencia_id }}</td>
+            <td><label for="{{ form.tipoLicencia_id.id_for_label }}">{{ form.tipoLicencia_id.label }}</label>{{ form.tipoLicencia_id }}</td>
         </tr>
         <tr>
-          
-            <td>{{ form.claseLicencia_id }}</td>
+            <td><label for="{{ form.claseLicencia_id.id_for_label }}">{{ form.claseLicencia_id.label }}</label>{{ form.claseLicencia_id }}</td>
         </tr>
         <tr>
-            <td>{{ form.fechaEmision }}</td>
+            <td><label for="{{ form.fechaEmision.id_for_label }}">{{ form.fechaEmision.label }}</label>{{ form.fechaEmision }}</td>
         </tr>
         <tr>
-            <td>{{ form.fechaVencimiento }}</td>
+            <td><label for="{{ form.fechaVencimiento.id_for_label }}">{{ form.fechaVencimiento.label }}</label>{{ form.fechaVencimiento }}</td>
         </tr>
         <tr>
-            <td>{{ form.rutaDoc }}</td>
+            <td><label for="{{ form.rutaDoc.id_for_label }}">{{ form.rutaDoc.label }}</label>{{ form.rutaDoc }}</td>
         </tr>
         <tr>
-            <td>{{ form.observacion }}</td>
+            <td><label for="{{ form.observacion.id_for_label }}">{{ form.observacion.label }}</label>{{ form.observacion }}</td>
         </tr>
     </table>
     <button type="submit">Guardar</button>

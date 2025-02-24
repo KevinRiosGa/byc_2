@@ -65,6 +65,7 @@ class LicenciasPersonal(forms.ModelForm):
             'fechaVencimiento': forms.DateInput(attrs={'type': 'date'}),
             'rutaDoc': forms.FileInput(attrs={'accept': 'application/pdf, image/jpg, image/png'})
         }
+        labels = {'tipoLicencia_id': 'Tipo de licencia', 'claseLicencia_id': 'Clase de licencia', 'fechaEmision': 'Fecha de emisión', 'fechaVencimiento': 'Fecha de vencimiento', 'rutaDoc': 'Documento', 'observacion': 'Observación'}
 
         tipoLicencia_id = forms.ModelChoiceField(queryset=TipoLicencia.objects.all(), empty_label='-----------')
         claseLicencia_id = forms.ModelChoiceField(queryset=ClaseLicencia.objects.all(), empty_label='-----------')
@@ -82,6 +83,8 @@ class CertificacionPersonal(forms.ModelForm):
             'rutaDoc': forms.FileInput(attrs={'accept': 'application/pdf, image/jpg, image/png'}),
         }
 
+        labels = {'proveedor_id': 'Proveedor', 'tipoCertificacion_id': 'Tipo de certificación', 'fechaEmision': 'Fecha de emisión', 'fechaVencimiento': 'Fecha de vencimiento', 'rutaDoc': 'Documento', 'observacion': 'Observación'}
+
         proveedor_id = forms.ModelChoiceField(queryset=Proveedor.objects.all(), empty_label='-----------')
         tipoCertificacion_id = forms.ModelChoiceField(queryset=TipoCertificacion.objects.all(), empty_label='-----------')
         
@@ -96,6 +99,8 @@ class ExamenPersonal(forms.ModelForm):
             'fechaVencimiento' : forms.DateInput(attrs={'type': 'date'}),
             'rutaDoc' : forms.FileInput(attrs={'accept': 'application/pdf, image/jpg, image/png'})
         }
+
+        labels = {'tipoEx_id': 'Tipo de examen', 'resultadoEx_id': 'Resultado', 'proveedor_id': 'Proveedor', 'fechaEmision': 'Fecha de emisión', 'fechaVencimiento': 'Fecha de vencimiento', 'rutaDoc': 'Documento', 'observacion': 'Observación'}
 
         tipoEx_id = forms.ModelChoiceField(queryset=TipoExamen.objects.all(), empty_label='-----------')
         resultadoEx_id = forms.ModelChoiceField(queryset=ResultadoExamen.objects.all(), empty_label='-----------')
