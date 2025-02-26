@@ -1,5 +1,3 @@
-
-
 {% extends 'home/index.html' %}
 
 {% block title %}Formulario de ingreso de personal{% endblock %}
@@ -8,57 +6,108 @@
 
 {% load static %}
 
-<h1>Formulario de ingreso de personal</h1>
-<div>
+<div class="container-fluid">
+    <div class="d-flex justify-content-center mt-2 mb-2">
+        <h1>Formulario de ingreso de personal</h1>
+    </div>
+    
     <form action="#" method="POST" id="personal-form">
         {% csrf_token %}
         <a href="{% url 'table_personal' %}">Volver</a>
         <table>
 
             <h3>Información personal</h3>
-            <tr>
-                <td><label for="{{ form.rut.id_for_label }}">Rut</label>
-                    <label for="{{ form.dvrut.id_for_label }}"></label>
-                </td>
-                <td>{{ personal_form.rut }} - {{ personal_form.dvrut }}</td>
-    
-            </tr>
-            <tr>
-                <td><label for="{{ form.nombre.id_for_label }}">Nombre</label></td>
-                <td>{{ personal_form.nombre }}</td>
-            </tr>
-            <tr>
-                <td><label for="{{ form.apepat.id_for_label }}">Apellido Paterno</label></td>
-                <td>{{ personal_form.apepat }}</td>
-            </tr>
-            <tr>
-                <td><label for="{{ form.apemat.id_for_label }}">Apellido Materno</label></td>
-                <td>{{ personal_form.apemat }}</td>
-            </tr>
-            <tr>
-                <td><label for="{{ form.sexo_id.id_for_label }}">Sexo</label></td>
-                <td>{{ personal_form.sexo_id }}</td>
-            </tr>
-            <tr>
-                <td><label for="{{ form.fechanac.id_for_label }}">Fecha de nacimiento</label></td>
-                <td>{{ personal_form.fechanac }}</td>
-            </tr>
-            <tr>
-                <td><label for="{{ form.estcivil_id.id_for_label }}">Estado civil</label></td>
-                <td>{{ personal_form.estcivil_id }}</td>
-            </tr>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Rut</span>
+                        {{ personal_form.rut }}
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="input-group input-group-sm mb-3">
+                        {{ personal_form.dvrut }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Nombres</span>
+                        {{ personal_form.nombre }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Apellido Paterno</span>
+                        {{ personal_form.apepat }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Apellido Materno</span>
+                        {{ personal_form.apemat }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ personal_form.sexo_id.id_for_label }}">Sexo</label>
+                        {{ personal_form.sexo_id }}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ personal_form.region_id.id_for_label }}">Región</label>
+                        {{ personal_form.region_id }}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ personal_form.comuna_id.id_for_label }}">Comuna</label>
+                        {{ personal_form.comuna_id }}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ personal_form.estcivil_id.id_for_label }}">Estado civil</label>
+                        {{ personal_form.estcivil_id }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ personal_form.fechanac.id_for_label }}">Fecha de nacimiento</label>
+                        {{ personal_form.fechanac }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ personal_form.correo.id_for_label }}">Correo electrónico</label>
+                        {{ personal_form.correo }}
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
             <tr>
                 <td><label for="{{ form.correo.id_for_label }}">Correo electrónico</label></td>
                 <td>{{ personal_form.correo }}</td>
             </tr>
-            <tr>
-                <td><label for="{{ form.region_id.id_for_label }}">Región</label></td>
-                <td>{{ personal_form.region_id }}</td>
-            </tr>
-            <tr>
-                <td><label for="{{ form.comuna_id.id_for_label }}">Comuna</label></td>
-                <td>{{ personal_form.comuna_id }}</td>
-            </tr>
+
             <tr>
                 <td><label for="{{ form.direccion.id_for_label }}">Dirección</label></td>
                 <td>{{ personal_form.direccion }}</td>
@@ -97,6 +146,7 @@
         
     </form>
     <script src="{% static 'js/create_personal.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </div>
 
 {% endblock %}
