@@ -5,26 +5,32 @@
 {% block content %}
 
 {% load static %}
-
-<div class="container-fluid">
-    <div class="d-flex justify-content-center mt-2 mb-2">
-        <h1>Formulario de ingreso de personal</h1>
+<link rel="stylesheet" href="{% static 'css/create_personal.css' %}">
+<div class="container-fluid form-container" style="background-color: #efefef;">
+    <div class="d-flex justify-content-center mt-3 mb-2">
+        <h2 class="display-5 fw-semibold">Formulario de ingreso de personal</h2>
     </div>
     
     <form action="#" method="POST" id="personal-form">
         {% csrf_token %}
-        <a href="{% url 'table_personal' %}">Volver</a>
-        <table>
+        <div class="d-flex justify-content-start">
+            <a class="btn boton-volver" href="{% url 'table_personal' %}">
+                <i class="fa-solid fa-angle-left me-2"></i>Volver
+            </a>
+        </div>
+        <table class="table-responsive">
 
-            <h3>Información personal</h3>
+            <div class="subtitle-personal-form mt-4 mb-4 fst-italic">
+                <h3>Información personal</h3>
+            </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 col-sm-10 col-xs-10">
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text">Rut</span>
                         {{ personal_form.rut }}
                     </div>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-1 col-sm-2 col-xs-2">
                     <div class="input-group input-group-sm mb-3">
                         {{ personal_form.dvrut }}
                     </div>
@@ -52,25 +58,19 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ personal_form.fechanac.id_for_label }}">Fecha Nacimiento</label>
+                        {{ personal_form.fechanac }}
+                    </div>
+                </div>
+                <div class="col-md-4">
                     <div class="input-group input-group-sm mb-3">
                         <label class="input-group-text" for="{{ personal_form.sexo_id.id_for_label }}">Sexo</label>
                         {{ personal_form.sexo_id }}
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="input-group input-group-sm mb-3">
-                        <label class="input-group-text" for="{{ personal_form.region_id.id_for_label }}">Región</label>
-                        {{ personal_form.region_id }}
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group input-group-sm mb-3">
-                        <label class="input-group-text" for="{{ personal_form.comuna_id.id_for_label }}">Comuna</label>
-                        {{ personal_form.comuna_id }}
-                    </div>
-                </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="input-group input-group-sm mb-3">
                         <label class="input-group-text" for="{{ personal_form.estcivil_id.id_for_label }}">Estado civil</label>
                         {{ personal_form.estcivil_id }}
@@ -78,12 +78,26 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="input-group input-group-sm mb-3">
-                        <label class="input-group-text" for="{{ personal_form.fechanac.id_for_label }}">Fecha de nacimiento</label>
-                        {{ personal_form.fechanac }}
+                        <span class="input-group-text">Dirección</span>
+                        {{ personal_form.direccion }}
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ personal_form.region_id.id_for_label }}">Región</label>
+                        {{ personal_form.region_id }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ personal_form.comuna_id.id_for_label }}">Comuna</label>
+                        {{ personal_form.comuna_id }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <div class="input-group input-group-sm mb-3">
                         <label class="input-group-text" for="{{ personal_form.correo.id_for_label }}">Correo electrónico</label>
@@ -91,46 +105,41 @@
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-            <tr>
-                <td><label for="{{ form.correo.id_for_label }}">Correo electrónico</label></td>
-                <td>{{ personal_form.correo }}</td>
-            </tr>
-
-            <tr>
-                <td><label for="{{ form.direccion.id_for_label }}">Dirección</label></td>
-                <td>{{ personal_form.direccion }}</td>
-            </tr>
+        
         </table>
-        <h3>Información laboral</h3>
+        
+        <div class="subtitle-laboral-form mt-4 mb-4 fst-italic">
+            <h3>Información laboral</h3>
+        </div>
         <table>
-            <tr>
-                <td><label for="{{ form.direccion.id_for_label }}">Empresa</label></td>
-                <td>{{ laboral_form.empresa_id }}</td>
-            </tr>
-            <tr>
-                <td><label for="{{ form.direccion.id_for_label }}">Departamento</label></td>
-                <td>{{ laboral_form.depto_id }}</td>
-            </tr>
-            <tr>
-                <td><label for="{{ form.direccion.id_for_label }}">Cargo</label></td>
-                <td>{{ laboral_form.cargo_id }}</td>
-            </tr>
-            <tr>
-                <td><label for="{{ form.direccion.id_for_label }}">Fecha Inicio Contrato</label></td>
-                <td>{{ laboral_form.fechacontrata }}</td>
-            </tr>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ laboral_form.empresa_id.id_for_label }}">Empresa</label>
+                        {{ laboral_form.empresa_id }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ laboral_form.depto_id.id_for_label }}">Departamento</label>
+                        {{ laboral_form.depto_id }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ laboral_form.cargo_id.id_for_label }}">Cargo</label>
+                        {{ laboral_form.cargo_id }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="{{ laboral_form.fechacontrata.id_for_label }}">Fecha Inicio Contrato</label>
+                        {{ laboral_form.fechacontrata }}
+                    </div>
+                </div>
+            </div>
         </table>
     
         {% if form.non_field_errors %}
@@ -140,13 +149,13 @@
                 {% endfor %}
             </div>
         {% endif %}
-            <div>
-                <button type="submit" class="boton-guardar">Guardar</button>
+            <div class="d-flex justify-content-center mt-2">
+                <button type="submit" class="btn boton-guardar w-25">Guardar</button>
             </div>
         
     </form>
     <script src="{% static 'js/create_personal.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
 </div>
 
 {% endblock %}

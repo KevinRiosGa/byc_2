@@ -1,0 +1,14 @@
+.subtitle-personal-form, .subtitle-laboral-form{
+    border-bottom: 1px solid #000000;
+}
+
+.boton-guardar, .boton-volver{
+    color: black !important;
+    border-radius: 8px;
+    border: 1px solid black;
+}
+
+.boton-guardar:hover, .boton-volver:hover{
+    background-color: #343a40 !important;
+    color: white !important;
+}
