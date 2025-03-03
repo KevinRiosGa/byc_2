@@ -2,3 +2,21 @@
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
 }
+
+.btn-ingreso-personal{
+    color: white !important;
+    background-color: #616161 !important;
+}
+
+.btn-ingreso-personal:hover{
+    background-color: #343a40 !important;
+}
+
+.view-link{
+    text-decoration: none !important;
+    color: black;
+}
+
+.view-link:hover {
+    color: blue;
+}

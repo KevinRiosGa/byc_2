@@ -2,83 +2,243 @@
 {% block title %}Visualización de personal {% endblock %}
 {% block content %}
 {% load static %}
-<div>
-    <h1>Detalle del Usuario</h1>
-    <a href="{% url 'table_personal' %}">Volver</a>
-</div>
-<div>
-<div>
-    <table>
-        <!-- Información Personal -->
-        <h3>Información personal</h3>
-        <tr>
-            <td><label for="rut">Rut</label></td>
-            <td><input type="text" name="rut" id="rut" value="{{ usuario.rut }}" readonly></td>
-            <td><label for="rut">-</label></td>
-            <td><input type="text" name="rut" id="rut" value="{{ usuario.dvrut }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="nombre">Nombre:</label></td>
-            <td><input type="text" value="{{ usuario.nombre }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="apepat">Apellido Paterno:</label></td>
-            <td><input type="text" value="{{ usuario.apepat }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="apemat">Apellido Materno:</label></td>
-            <td><input type="text" value="{{ usuario.apemat }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="sexo">Sexo:</label></td>
-            <td><input type="text" value="{{ usuario.sexo_id.sexo }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="fechanac">Fecha de nacimiento:</label></td>
-            <td><input type="text" value="{{ usuario.fechanac  }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="estcivil">Estado civil:</label></td>
-            <td><input type="text" value="{{ usuario.estcivil_id.estadocivil  }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="correo">Correo electrónico:</label></td>
-            <td><input type="text" value="{{ usuario.correo  }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="region">Región:</label></td>
-            <td><input type="text" value="{{ usuario.region_id.region  }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="comuna">Comuna:</label></td>
-            <td><input type="text" value="{{ usuario.comuna_id.comuna  }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="direccion">Dirección:</label></td>
-            <td><input type="text" value="{{ usuario.direccion  }}" readonly></td>
-        </tr>
-    </table>
+<link rel="stylesheet" href="{% static 'css/view_personal.css' %}">
 
-    <table>
-        <!-- Información Laboral -->
-        <h3>Información laboral</h3>
-        <tr>
-            <td><label for="depto">Departamento:</label></td>
-            <td><input type="text" value="{{ info_laboral.depto_id.depto }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="cargo">Cargo:</label></td>
-            <td><input type="text" value="{{ info_laboral.cargo_id.cargo }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="empresa">Empresa:</label></td>
-            <td><input type="text" value="{{ info_laboral.empresa_id.razonSocial }}" readonly></td>
-        </tr>
-        <tr>
-            <td><label for="fechacontrata">Fecha de ingreso:</label></td>
-            <td><input type="text" value="{{ info_laboral.fechacontrata }}" readonly></td>
-        </tr>
-    </table>
+
+<div class="d-flex justify-content-start">
+    <a class="btn boton-volver" href="{% url 'table_personal' %}">
+        <i class="fa-solid fa-angle-left me-2"></i>Volver
+    </a>
 </div>
+<!--navegacion con tabs-->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="detalle-tab" data-bs-toggle="tab" href="#detalle" role="tab" aria-controls="detalle" aria-selected="true">Detalle</a>
+
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="licencia-tab" data-bs-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false">Licencias</a>
+
+    </li>
+</ul>
+
+
+
+<div class="tab-content" id="myTabContent">
+
+    <!--INFORMACION PERSONAL Y LABORAL-->
+    <div class="tab-pane fade show active" id="detalle" role="tabpanel" aria-labelledby="detalle-tab">
+        <div class="container-fluid form-container" style="background-color: #efefef;">
+            <div class="d-flex justify-content-center mt-3 mb-2">
+                <h2 class="display-6 fw-semibold">Detalle de personal</h2>
+            </div>
+            <table class="table-responsive">
+                <div class="subtitle-personal-form mt-4 mb-4 fst-italic">
+                    <h3>Información personal</h3>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-10 col-xs-10">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Rut</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ usuario.rut }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-sm-1 col-xs-2">
+                        <div class="input-group input-group-sm mb-3"> 
+                            <input type="text" class="form-control form-contro-sm" value="{{ usuario.dvrut }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Nombres</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ usuario.nombre }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Apellido Paterno</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ usuario.apepat }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Apellido Materno</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ usuario.apemat }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Fecha Nacimiento</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ usuario.fechanac }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Sexo</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ usuario.sexo_id.sexo }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Estado civil</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ usuario.estcivil_id.estadocivil }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Dirección</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ usuario.direccion }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Región</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ usuario.region_id.region }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Comuna</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ usuario.comuna_id.comuna }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Correo electrónico</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ usuario.correo }}" readonly>
+                        </div>
+                    </div>
+                </div>
+            </table>
+            <div class="subtitle-laboral-form mt-4 mb-4 fst-italic">
+                <h3>Información laboral</h3>
+            </div>
+            <table class="table-responsive">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Departamento</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ info_laboral.depto_id.depto }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Cargo</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ info_laboral.cargo_id.cargo }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Empresa</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ info_laboral.empresa_id.razonSocial }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-2">
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text">Fecha Ingreso</span>
+                            <input type="text" class="form-control form-control-sm" value="{{ info_laboral.fechacontrata }}" readonly>
+                        </div>
+                    </div>
+                </div>
+            </table>
+        </div>
+    </div>
+
+
+    <!--Licencias del personal-->
+    <div class="tab-pane fade" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
+        <h2>Formulario de Licencia</h2>
+        <h5>{{ usuario.nombre }} {{ usuario.apepat }} {{ usuario.apemat }}</h3><br>
+        
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td><label for="{{ form_license.tipoLicencia_id.id_for_label }}">{{ form_license.tipoLicencia_id.label }}</label>{{ form_license.tipoLicencia_id }}</td>
+                </tr>
+                <tr>
+                    <td><label for="{{ form_license.claseLicencia_id.id_for_label }}">{{ form_license.claseLicencia_id.label }}</label>{{ form_license.claseLicencia_id }}</td>
+                </tr>
+                <tr>
+                    <td><label for="{{ form_license.fechaEmision.id_for_label }}">{{ form_license.fechaEmision.label }}</label>{{ form_license.fechaEmision }}</td>
+                </tr>
+                <tr>
+                    <td><label for="{{ form_license.fechaVencimiento.id_for_label }}">{{ form_license.fechaVencimiento.label }}</label>{{ form_license.fechaVencimiento }}</td>
+                </tr>
+                <tr>
+                    <td><label for="{{ form_license.rutaDoc.id_for_label }}">{{ form_license.rutaDoc.label }}</label>{{ form_license.rutaDoc }}</td>
+                </tr>
+                <tr>
+                    <td><label for="{{ form_license.observacion.id_for_label }}">{{ form_license.observacion.label }}</label>{{ form_license.observacion }}</td>
+                </tr>
+            </table>
+            <button type="submit">Guardar</button>
+        </form>
+
+        <h2>Licencias Vigentes</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Clase Licencia</th>
+                    <th>Fecha de emision</th>
+                    <th>Fecha Vencimiento</th>
+                    <th>Documento adjunto</th>
+                    <th>Comentario</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if historial_licencias %}
+                    {% for licencia in historial_licencias %}
+                    <tr>
+                        <td>{{ licencia.claseLicencia_id }}</td>
+                    
+                    
+                        <td>{{ licencia.fechaEmision }}</td>
+                    
+                    
+                        <td>{{ licencia.fechaVencimiento }}</td>
+                    
+                    
+                        {% if licencia.rutaDoc %}
+                            <td><a href="{{ licencia.rutaDoc.url }}" target="_blank">Ver documento</a></td>
+                        {% else %}
+                            <td>No disponible</td>
+                        {% endif %}
+                    
+                    
+                        <td>{{ licencia.observacion }} </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td>No hay datos disponibles</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
+
+
+
+
+
+    
+       
+
 {% endblock %}

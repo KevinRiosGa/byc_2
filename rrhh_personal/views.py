@@ -111,7 +111,8 @@ class PersonalDetailView(LoginRequiredMixin, View):
 
 #vista para ingresar licencias para el personal
 class PersonalLicenceEditView(LoginRequiredMixin, View):
-    template_name = 'personal/LicenceEdit_personal.html'
+    #template_name = 'personal/LicenceEdit_personal.html'
+    template_name = 'personal/view_personal.html'
 
     def get(self, request, pk, *args, **kwargs):
         usuario = get_object_or_404(Personal, personal_id=pk)
@@ -215,3 +216,120 @@ class PersonalExamenEditView(LoginRequiredMixin, View):
             'info_laboral': info_laboral
         }
         return render(request, self.template_name, context)    
+    
+
+
+class PersonalEditView(LoginRequiredMixin, View):
+    template_name = 'personal/view_personal.html'
+
+    def _get_personal_data(self, pk):
+        #Obtiene los datos del usuario y su información laboral
+        usuario = get_object_or_404(Personal, personal_id=pk)
+        info_laboral = usuario.infolaboral_set.first()
+        return usuario, info_laboral
+
+    def personalDetailView(self, request, pk, *args, **kwargs):
+        usuario, info_laboral = self._get_personal_data(pk)
+        context = {'usuario': usuario, 'info_laboral': info_laboral}
+        return render(request, self.template_name, context)
+
+    def personalEditView(self, request, pk, *args, **kwargs):
+        usuario, info_laboral = self._get_personal_data(pk)
+
+        form_edit_personal = PersonalCreationForm(instance=usuario)
+        laboral_form_edit_personal = InfoLaboralPersonalForm(instance=info_laboral)
+
+        # Deshabilitar campos
+        self._disable_form_fields(form_edit_personal)
+        self._disable_form_fields(laboral_form_edit_personal)
+
+        context = {'form_edit_personal': form_edit_personal, 'laboral_form_edit_personal': laboral_form_edit_personal}
+        return render(request, self.template_name, context)
+
+    def personalLicenceEditView(self, request, pk, *args, **kwargs):
+        print("Llegó al método personalLicenceEditView")
+        usuario, info_laboral = self._get_personal_data(pk)
+
+        historial_licencias_completos = LicenciaPorPersonal.objects.filter(personal_id=usuario).order_by('claseLicencia_id').distinct('claseLicencia_id')
+
+        form_license = LicenciasPersonal()
+        context = {'form_license': form_license, 'usuario': usuario, 'info_laboral': info_laboral, 'historial_licencias': historial_licencias_completos}
+        return render(request, self.template_name, context)
+
+    def personalCertificationEditView(self, request, pk, *args, **kwargs):
+        usuario, info_laboral = self._get_personal_data(pk)
+
+        form = CertificacionPersonal()
+        historial_de_certificaciones = Certificacion.objects.filter(personal_id=usuario)
+
+        context = {'form': form, 'usuario': usuario, 'info_laboral': info_laboral, 'historial_de_certificaciones': historial_de_certificaciones}
+        return render(request, self.template_name, context)
+
+    def personalExamenEditView(self, request, pk, *args, **kwargs):
+        usuario, info_laboral = self._get_personal_data(pk)
+
+        form = ExamenPersonal()
+        historial_de_examen = Examen.objects.filter(personal_id=usuario)
+
+        context = {'form': form, 'usuario': usuario, 'info_laboral': info_laboral, 'historial_de_examen': historial_de_examen}
+        return render(request, self.template_name, context)
+
+    def postPersonalEditView(self, request, pk, *args, **kwargs):
+        usuario, info_laboral = self._get_personal_data(pk)
+
+        form = PersonalCreationForm(request.POST, instance=usuario)
+        laboral_form = InfoLaboralPersonalForm(request.POST, instance=info_laboral)
+
+        if form.is_valid() and laboral_form.is_valid():
+            form.save()
+            laboral_form.save()
+
+        context = {'form': form, 'laboral_form': laboral_form}
+        return render(request, self.template_name, context)
+
+    def postPersonalLicenceEditView(self, request, pk, *args, **kwargs):
+        usuario, info_laboral = self._get_personal_data(pk)
+
+        form = LicenciasPersonal(request.POST, request.FILES)
+        if form.is_valid():
+            licencia = form.save(commit=False)
+            licencia.personal_id = usuario
+            LicenciaPorPersonal.objects.filter(personal_id=usuario, claseLicencia_id=licencia.claseLicencia_id).delete()
+            licencia.save()
+            return redirect('personalLicenceEditView', pk=pk)
+
+        historial_licencias = LicenciaPorPersonal.objects.filter(personal_id=usuario)
+        context = {'form': form, 'usuario': usuario, 'historial_licencias': historial_licencias, 'info_laboral': info_laboral}
+        return render(request, self.template_name, context)
+
+    def postPersonalCertificationEditView(self, request, pk, *args, **kwargs):
+        usuario, info_laboral = self._get_personal_data(pk)
+
+        form = CertificacionPersonal(request.POST, request.FILES)
+        if form.is_valid():
+            certificacion = form.save(commit=False)
+            certificacion.personal_id = usuario
+            certificacion.save()
+            return redirect('personalCertificationEditView', pk=pk)
+
+        context = {'form': form, 'usuario': usuario, 'info_laboral': info_laboral}
+        return render(request, self.template_name, context)
+
+    def postPersonalExamenEditView(self, request, pk, *args, **kwargs):
+        usuario, info_laboral = self._get_personal_data(pk)
+
+        form = ExamenPersonal(request.POST, request.FILES)
+        if form.is_valid():
+            examen = form.save(commit=False)
+            examen.personal_id = usuario
+            examen.save()
+            return redirect('personalExamenEditView', pk=pk)
+
+        context = {'form': form, 'usuario': usuario, 'info_laboral': info_laboral}
+        return render(request, self.template_name, context)
+
+    @staticmethod
+    def _disable_form_fields(form):
+        """Deshabilita todos los campos de un formulario."""
+        for field in form.fields.values():
+            field.widget.attrs['disabled'] = 'disabled'

@@ -2,7 +2,7 @@
     border-bottom: 1px solid #000000;
 }
 
-.boton-guardar, .boton-volver{
+.boton-volver{
     color: white !important;
     border-radius: 8px;
     background-color: #616161;
@@ -12,4 +12,3 @@
     background-color: #343a40 !important;
     color: white !important;
 }
-

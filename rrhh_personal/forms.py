@@ -7,25 +7,25 @@ class PersonalCreationForm(forms.ModelForm):
 
     sexo_id = forms.ModelChoiceField(
         queryset=Sexo.objects.all(),
-        empty_label='-----------',
+        empty_label='elija una opción',
         widget=forms.Select(attrs={'class': 'form-select'})  # Aquí se aplica el widget
     )
     
     region_id = forms.ModelChoiceField(
         queryset=Region.objects.all(),
-        empty_label='-----------',
+        empty_label='elija una opción',
         widget=forms.Select(attrs={'class': 'form-select'})  # Aquí también
     )
 
     comuna_id = forms.ModelChoiceField(
         queryset=Comuna.objects.all(),
-        empty_label='-----------',
+        empty_label='elija una opción',
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
     estcivil_id = forms.ModelChoiceField(
         queryset=EstadoCivil.objects.all(),
-        empty_label='-----------',
+        empty_label='elija una opción',
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
@@ -65,19 +65,19 @@ class InfoLaboralPersonalForm(forms.ModelForm):
 
     empresa_id = forms.ModelChoiceField(
         queryset=Empresa.objects.all(),
-        empty_label='-----------',
+        empty_label='elija una opción',
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
     depto_id = forms.ModelChoiceField(
         queryset=DeptoEmpresa.objects.all(),
-        empty_label='-----------',
+        empty_label='elija una opción',
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
     cargo_id = forms.ModelChoiceField(
         queryset=Cargo.objects.all(),
-        empty_label='-----------',
+        empty_label='elija una opción',
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
