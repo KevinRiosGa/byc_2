@@ -26,7 +26,8 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/accounts/login/', permanent=False)),
     path('accounts/', include('mainLogin.urls')),
     path('home/', include('mainHome.urls')),
-    path('users/', include('rrhh_personal.urls'))
+    path('users/', include('rrhh_personal.urls')),
+    path('maq_settings/', include('maq_settings.urls'))
 ] 
 
 
