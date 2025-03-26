@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'mainHome',
     'rrhh_personal',
     'mainLogin',
+    'maq_settings',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
