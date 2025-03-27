@@ -64,7 +64,20 @@
                             <a class="nav-link text-dark" href="#">Tabla de Vehículos</a>
                             <a class="nav-link text-dark" href="#">Tareas</a>
                             <a class="nav-link text-dark" href="#">Informes</a>
+                            <button class="btn w-100 text-start text-dark d-flex align-items-center gap-2" data-bs-toggle="collapse" data-bs-target="#sidebarSettings_1" aria-expanded="false">
+                                <i class="bi bi-sliders2"></i> Configuraciones
+                                <i class="bi bi-chevron-down ms-auto"></i>
+                            </button>
                         </div>
+                        <div id="sidebarSettings_1" class="collapse ps-4">
+                            <a class="nav-link text-dark" href="{% url 'tipoequipo_list' %}">Tipos de equipos</a>
+                            <a class="nav-link text-dark" href="{% url 'marcaequipo_list' %}">Marcas</a>
+                            <a class="nav-link text-dark" href="#">Modelos</a>
+                            <a class="nav-link text-dark" href="#">Secciones</a>
+                            <a class="nav-link text-dark" href="#">Reparaciones</a>
+                        </div>
+
+                        
                     </li>
     
                     <!-- Menú Planificaciones -->
@@ -88,7 +101,7 @@
             <nav class="navbar navbar-expand-lg bg-light d-none d-md-flex" id="navbar-top-lg">
                 <div class="container-fluid">
                     <div class="d-flex justify-content-end w-100">
-                        <span class="navbar-text me-2 fs-5 fst-italic">Guillermo Diaz Flores | Planificador de Maquinarias</span>
+                        <span class="navbar-text me-2 fs-5 fst-italic">Usuario | Cargo</span>
                         <div class="d-flex align-items-center flex-column flex-md-row">
                             <!-- Botón de configuración -->
                             <a class="btn me-1 d-flex justify-content-center align-items-center">
