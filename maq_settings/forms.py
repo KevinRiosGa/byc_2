@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import inlineformset_factory
 from .models import TipoEquipo, MarcaEquipo, ModeloEquipo
-
+from django.core.exceptions import ValidationError
 
 class TipoEquipoForm(forms.ModelForm):
     class Meta: 
@@ -29,21 +29,18 @@ class TipoEquipoForm(forms.ModelForm):
         return prefixeq
 
 class MarcaEquipoForm(forms.ModelForm):
-    tipoeq = forms.ModelChoiceField(
-            queryset=TipoEquipo.objects.all(),
-            empty_label= "Seleccione un tipo de equipo",
-            required=True,
-            label="Tipos de equipo",
-            widget= forms.Select({
-                'class':'form-control',
-                'placeholder':'Seleccione un tipo de equipo'
-            })
-        )
+    # Usamos ModelMultipleChoiceField para que los tipos de equipo se muestren como checkboxes
+    tipoeq = forms.ModelMultipleChoiceField(
+        queryset=TipoEquipo.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label = 'Tipo equipo',
+        required=True,
+    )
     class Meta:
         model = MarcaEquipo
-        fields = ['marcaeq']
+        fields = ['marcaeq', 'tipoeq']
         labels = {
-            'marcaeq': 'Marca'
+            'marcaeq': 'Marca',
         }
         widgets = {
             'marcaeq': forms.TextInput(attrs={
@@ -51,3 +48,9 @@ class MarcaEquipoForm(forms.ModelForm):
                 'placeholder': 'Ingrese marca'
             }),
         }
+    def clean_marcaeq(self):
+        marcaeq = self.cleaned_data.get('marcaeq')
+        if MarcaEquipo.objects.filter(marcaeq='marcaeq').exists():
+            raise forms.ValidationError("La marca ya existe.")
+        return marcaeq  
+         

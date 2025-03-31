@@ -1,5 +1,7 @@
 from django.http import JsonResponse
 from django.urls import  reverse_lazy
+from django.views import View
+from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import TipoEquipo, MarcaEquipo
@@ -44,12 +46,13 @@ class TipoEquipoDeleteView(DeleteView):
         return JsonResponse({'success': True})
 
 #Vistas para las marcas
-class MarcaEquipoListView(CreateView, ListView):
+class MarcaEquipoCreateView(CreateView,ListView):
     model = MarcaEquipo
     form_class = MarcaEquipoForm
     template_name = 'marcaequipolist.html'
     context_object_name = 'marcas'
-    success_url = reverse_lazy('marcaequipo_list')
+    success_url = reverse_lazy('marcaequipo_create')
+
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
@@ -57,25 +60,30 @@ class MarcaEquipoListView(CreateView, ListView):
             return JsonResponse({'success': True})
         else:
             return JsonResponse({'success': False, 'errors': form.errors}, status=400)
-        
+
+class ObtenerDatosMarcaView(View):
+    def get(self, request, pk):
+        marca = MarcaEquipo.objects.get(pk=pk)
+        tipos_equipos_ids = marca.tipoeq.values_list('id', flat=True)
+        tipos_equipos = TipoEquipo.objects.filter(id__in=tipos_equipos_ids)  # Filtrar los tipos de equipos asociados
+        tipos_equipos_data = [{'id': tipo.id, 'nombre': tipo.tipoeq} for tipo in tipos_equipos]
+
+        return JsonResponse({
+            'marca': marca.marcaeq,
+            'tipos_equipos_ids': list(tipos_equipos_ids),  # IDs de los tipos de equipos seleccionados
+            'tipos_equipos': tipos_equipos_data  # Datos completos de los tipos de equipos
+        })
+
 class MarcaEquipoUpdateView(UpdateView):
     model = MarcaEquipo
     form_class = MarcaEquipoForm
-    success_url = reverse_lazy('marcaequipo_list')
+    template_name = 'marcaequipolist.html'
+    context_object_name = 'marca'
+    success_url = reverse_lazy('marcaequipo_create')
 
-    def post(self, request, *args, **kwargs):
-        marca = get_object_or_404(MarcaEquipo, pk=kwargs['pk'])
-        marca.marcaeq = request.POST.get('marcaeq')
-        tipos_equipos = request.POST.getlist('tipoeq')
-        marca.tipoeq.set(tipos_equipos)
-        marca.save()
-        return JsonResponse({'success': True})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Puedes pasar la lista de tipos de equipos aquí si necesitas usarla en el formulario
+        context['tipoeqlist'] = TipoEquipo.objects.all()
+        return context
 
-class MarcaEquipoDeleteView(DeleteView):
-    model = MarcaEquipo
-    success_url = reverse_lazy('marcaequipo_list')
-
-    def post(self, request, *args, **kwargs):
-        marca = get_object_or_404(MarcaEquipo, pk=kwargs['pk'])
-        marca.delete()
-        return JsonResponse({'success': True})

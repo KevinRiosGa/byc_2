@@ -8,17 +8,18 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <div class="container mt-4">
-    <h2>Gestión de marcas</h2>
+    <h2>Gestión marcas</h2><br>
+        
     <!-- Botón para abrir el modal de creación -->
-    <button class="btn btn-success mb-3"data-bs-toggle="modal" data-bs-target="#crearModal">Crear Marca</button>
-    
-    <!-- Datatable con las marcas y sus asociaciones -->
+    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#crearModal">Crear marca</button>
+
+    <!-- Tabla con los tipos de equipos -->
     <table id="marcasTable" class="display table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Marca</th>
-                <th>Tipo equipo</th>
+                <th>Tipo de equipo</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -27,9 +28,15 @@
             <tr>
                 <td>{{ marca.id }}</td>
                 <td>{{ marca.marcaeq }}</td>
-                <td>{{ marca.tipoeq }}</td>
                 <td>
-                    <button class="btn btn-primary btn-sm edit-btn" data-id="{{ marca.id }}" data-prefix="{{ marca.marcaeq }}" data-tipo="{{ marca.tipoeq }}" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-pencil-square"></i></button>
+                    <ul>
+                        {% for tipo in marca.tipoeq.all %}
+                            <li>{{ tipo.tipoeq }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm edit-btn"  data-id="{{ marca.id }}" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-pencil-square"></i></button>
                     <button class="btn btn-danger btn-sm delete-btn" data-id="{{ marca.id }}" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash3"></i></button>
                 </td>
             </tr>
@@ -38,7 +45,7 @@
     </table>
 </div>
 
-<!-- Modal para Crear Tipo de Equipo -->
+<!-- Modal para crear la marca -->
 <div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -57,37 +64,30 @@
     </div>
 </div>
 
-<!-- Modal para Editar -->
+<!-- Modal para Editar Marca -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Editar tipo de equipo</h5>
+                <h5 class="modal-title" id="editModalLabel">Editar marca</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                <div id="edit-message" style="display: none; padding: 10px; margin-bottom: 10px; border-radius: 5px;"></div>
-                <form id="form-edit">
+                <form method="post" id="form-edit">
                     {% csrf_token %}
-                    <input type="hidden" id="edit-id">
-                    <div class="mb-3">
-                        <label for="edit-prefixeq" class="form-label">Prefijo</label>
-                        <input type="text" class="form-control" id="edit-prefixeq" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit-tipoeq" class="form-label">Tipo de equipo</label>
-                        <input type="text" class="form-control" id="edit-tipoeq">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{% static 'js/marcaequipo.js' %}"></script>
+
 
 {% endblock %}

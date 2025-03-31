@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+
 
 # Create your models here.
 
@@ -15,9 +17,9 @@ class TipoEquipo(models.Model):
         verbose_name_plural = 'Tipo equipos'
 
 class MarcaEquipo(models.Model):
-    tipoeq = models.ForeignKey(TipoEquipo, on_delete=models.PROTECT, null=False, blank=False)
-    marcaeq = models.CharField(max_length=150, null=False, blank=False)
-
+    tipoeq = models.ManyToManyField(TipoEquipo)
+    marcaeq = models.CharField(max_length=150, unique=True, null=False, blank=False)
+    
     def __str__(self):
         return f"{self.marcaeq}"
     
@@ -25,9 +27,6 @@ class MarcaEquipo(models.Model):
         ordering = ['marcaeq']
         verbose_name = 'Marca'
         verbose_name_plural = 'Marcas'
-        constraints = [
-            models.UniqueConstraint(fields=['tipoeq','marcaeq'], name='unique_tipoeq_marcaeq')
-        ]
     
 class ModeloEquipo(models.Model):
     tipoeq = models.ForeignKey(TipoEquipo, on_delete=models.PROTECT, null=False, blank=False)
