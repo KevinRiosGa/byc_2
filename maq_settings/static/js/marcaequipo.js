@@ -1,118 +1,81 @@
 $(document).ready(function () {
-    // Inicializa DataTables
-    $('#marcasTable').DataTable({
+    const table = $('#marcasTable').DataTable({
         language: {
             url: "//cdn.datatables.net/plug-ins/2.2.2/i18n/es-CL.json"
         }
     });
 
-    // Manejo del envío del formulario de creación de marcas
-    $('#form-add').on('submit', function (e) {
-        e.preventDefault(); // Evitar recarga de página
-        var formData = $(this).serialize();
+    const showError = (modal, message) => {
+        $(modal + ' .alert-danger').remove();
+        $(modal + ' .modal-body').prepend(`
+            <div class="alert alert-danger" id="error-message">${message}</div>
+        `);
+    };
 
+    const handleFormSubmit = (form, url, modal) => {
+        const formData = new FormData(form[0]);
+        
         $.ajax({
-            url: "", // Usa la URL actual
+            url: url,
             method: 'POST',
             data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
                 if (response.success) {
-                    $('#crearModal').modal('hide'); // Cerrar modal si la marca se crea correctamente
-                    location.reload(); // Recargar la página para actualizar la tabla
+                    $(modal).modal('hide');
+                    location.reload();
+                } else {
+                    showError(modal, response.errors ? Object.values(response.errors).join(', ') : "Error al procesar la solicitud.");
                 }
             },
             error: function (xhr) {
-                let errors = xhr.responseJSON.errors;
-                let errorMessage = errors.marcaeq ? errors.marcaeq[0] : "Error al crear la marca, ya existe."
-
-                $("#crearModal .modal-body").prepend(`
-                    <div class="alert alert-danger" id="error-message">${errorMessage}</div>
-                `);
+                const errorMessage = xhr.responseJSON?.errors ? Object.values(xhr.responseJSON.errors).join(', ') : "Error al procesar la solicitud.";
+                showError(modal, errorMessage);
             }
         });
+    };
+
+    $('#form-add').on('submit', function (e) {
+        e.preventDefault();
+        handleFormSubmit($(this), "", '#crearModal');
     });
 
-    // Cuando se haga clic en el botón de editar
     $(document).on('click', '.edit-btn', function () {
-        var marcaId = $(this).data('id');  
-        console.log("Marca ID:", marcaId);
-
+        const marcaId = $(this).data('id');
         if (!marcaId) {
             console.error("No se ha encontrado el ID de la marca.");
             return;
         }
 
-        var url = '/maq_settings/obtener_datos_marca/' + marcaId + '/';
-
         $.ajax({
-            url: url,
+            url: '/maq_settings/obtener_datos_marca/' + marcaId + '/',
             method: 'GET',
             success: function (data) {
-                console.log('Datos recibidos:', data);
-
-                // Rellenar el campo de la marca
                 $('#editModal input[name="marcaeq"]').val(data.marca);
-
-                // Limpiar errores previos
-                $('#editModal .error-message').remove();
-
-                // Limpiar las opciones del select de checkboxes antes de agregar las nuevas
+                $('#editModal .alert-danger').remove();
                 $('#editModal input[name="tipoeq"]').prop('checked', false);
-
-                // Marcar las casillas correspondientes
-                $.each(data.tipos_equipos_ids, function (index, tipoId) {
+                
+                data.tipos_equipos_ids.forEach(tipoId => {
                     $('#editModal input[name="tipoeq"][value="' + tipoId + '"]').prop('checked', true);
                 });
 
-                // Establecer el ID de la marca en el formulario para la actualización
                 $('#form-edit').data('id', marcaId);
-
-                // Mostrar el modal
                 $('#editModal').modal('show');
             },
             error: function (error) {
-                console.log("Error:", error);
+                console.error("Error:", error);
             }
         });
     });
 
-    // Manejo del envío del formulario de edición
     $('#form-edit').on('submit', function (e) {
         e.preventDefault();
-
-        var marcaId = $(this).data('id'); 
-        console.log("Marca ID en submit:", marcaId);
-
+        const marcaId = $(this).data('id');
         if (!marcaId) {
             console.error("El ID de la marca no está disponible.");
             return;
         }
-
-        var formData = $(this).serialize();
-
-        $.ajax({
-            url: '/maq_settings/editar_marca/' + marcaId + '/',
-            method: 'POST',
-            data: formData,
-            success: function (data) {
-                console.log('Marca actualizada:', data);
-                $('#editModal').modal('hide'); 
-                location.reload();
-            },
-            error: function (xhr) {
-                var errors = xhr.responseJSON.errors;
-                var errorMessage = '';
-
-                if (errors.marcaeq) {
-                    errorMessage = errors.marcaeq[0]; // Captura el mensaje de error
-                }
-
-                // Mostrar el mensaje de error en rojo dentro del modal
-                $('#form-edit .error-message').remove(); // Elimina mensajes previos
-                $('#form-edit input[name="marcaeq"]').after(
-                    '<div class="text-danger error-message">' + errorMessage + '</div>'
-                );
-            }
-        });
+        handleFormSubmit($(this), '/maq_settings/editar_marca/' + marcaId + '/', '#editModal');
     });
 });

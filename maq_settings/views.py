@@ -83,7 +83,29 @@ class MarcaEquipoUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Puedes pasar la lista de tipos de equipos aquí si necesitas usarla en el formulario
         context['tipoeqlist'] = TipoEquipo.objects.all()
         return context
 
+    def form_valid(self, form):
+        try:
+            # Guardar los datos básicos de la marca
+            self.object = form.save()
+            
+            # Actualizar los tipos de equipos
+            self.object.tipoeq.clear()
+            tipos_equipos = form.cleaned_data.get('tipoeq', [])
+            if tipos_equipos:
+                self.object.tipoeq.add(*tipos_equipos)
+            
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'errors': str(e)}, status=400)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    

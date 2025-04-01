@@ -29,28 +29,27 @@ class TipoEquipoForm(forms.ModelForm):
         return prefixeq
 
 class MarcaEquipoForm(forms.ModelForm):
-    # Usamos ModelMultipleChoiceField para que los tipos de equipo se muestren como checkboxes
     tipoeq = forms.ModelMultipleChoiceField(
         queryset=TipoEquipo.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        label = 'Tipo equipo',
+        label='Tipo equipo',
         required=True,
     )
+
     class Meta:
         model = MarcaEquipo
         fields = ['marcaeq', 'tipoeq']
-        labels = {
-            'marcaeq': 'Marca',
-        }
+        labels = {'marcaeq': 'Marca'}
         widgets = {
             'marcaeq': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Ingrese marca'
-            }),
+            })
         }
+
     def clean_marcaeq(self):
         marcaeq = self.cleaned_data.get('marcaeq')
-        if MarcaEquipo.objects.filter(marcaeq='marcaeq').exists():
+        if not self.instance.pk and MarcaEquipo.objects.filter(marcaeq=marcaeq).exists():
             raise forms.ValidationError("La marca ya existe.")
         return marcaeq  
          
