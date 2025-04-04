@@ -52,4 +52,56 @@ class MarcaEquipoForm(forms.ModelForm):
         if not self.instance.pk and MarcaEquipo.objects.filter(marcaeq=marcaeq).exists():
             raise forms.ValidationError("La marca ya existe.")
         return marcaeq  
+
+class ModeloEquipoForm(forms.ModelForm):
+    class Meta:
+        model = ModeloEquipo
+        fields = ['tipoeq', 'marcaeq', 'modeloeq']
+        labels = {
+            'tipoeq': 'Tipo equipo',
+            'marcaeq': 'Marca',
+            'modeloeq': 'Modelo'
+        }
+        widgets = {
+            'tipoeq': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'tipo_equipo_select'
+            }),
+            'marcaeq': forms.Select(attrs={
+                'class': 'form-control',
+                'id': 'marca_equipo_select'
+            }),
+            'modeloeq': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese modelo'
+            })
+        }
+        error_messages = {
+            'modeloeq': {
+                'unique': 'Este modelo ya existe para la marca y tipo seleccionados.'
+            }
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        tipoeq = cleaned_data.get('tipoeq')
+        marcaeq = cleaned_data.get('marcaeq')
+        modeloeq = cleaned_data.get('modeloeq')
+
+        if tipoeq and marcaeq and modeloeq:
+            if ModeloEquipo.objects.filter(
+                tipoeq=tipoeq,
+                marcaeq=marcaeq,
+                modeloeq=modeloeq
+            ).exists():
+                # Si estamos editando, excluir el modelo actual
+                if self.instance.pk:
+                    if not ModeloEquipo.objects.filter(
+                        tipoeq=tipoeq,
+                        marcaeq=marcaeq,
+                        modeloeq=modeloeq
+                    ).exclude(pk=self.instance.pk).exists():
+                        return cleaned_data
+                
+        return cleaned_data  
          

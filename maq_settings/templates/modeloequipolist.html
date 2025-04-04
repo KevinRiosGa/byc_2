@@ -1,0 +1,124 @@
+{% extends 'home/index.html' %}
+{% load static %}
+{% block title %}Modelos{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="container mt-4">
+    <h2>Gestión modelos</h2><br>
+
+    <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modeloModal">
+        Crear Modelo
+    </button>
+    <table id="modelosTable" class="display table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tipo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for modelo in modelos %}
+            <tr>    
+                <td>{{ modelo.id }}</td>
+                <td>{{ modelo.tipoeq.tipoeq }}</td>
+                <td>{{ modelo.marcaeq.marcaeq }}</td>
+                <td>{{ modelo.modeloeq }}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm edit-btn" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#modeloModal"
+                            data-id="{{ modelo.id }}"
+                            data-tipo="{{ modelo.tipoeq.id }}"
+                            data-marca="{{ modelo.marcaeq.id }}"
+                            data-modelo="{{ modelo.modeloeq|escapejs }}">
+                            <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm eliminar-modelo" 
+                            data-id="{{ modelo.id }}">
+                            <i class="bi bi-trash3"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Modal para crear/editar modelo -->
+<div class="modal fade" id="modeloModal" tabindex="-1" aria-labelledby="modeloModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modeloModalLabel">Crear Modelo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="modeloForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="modelo_id" name="modelo_id">
+                    <div id="errorMessages" class="alert alert-danger d-none">
+                        <ul class="mb-0"></ul>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tipo_equipo_select" class="form-label">Tipo de Equipo</label>
+                        <select class="form-control" id="tipo_equipo_select" name="tipoeq" required>
+                            <option value="">Seleccione un tipo</option>
+                            {% for tipo in tipos_equipos %}
+                            <option value="{{ tipo.id }}">{{ tipo.tipoeq }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="marca_equipo_select" class="form-label">Marca</label>
+                        <select class="form-control" id="marca_equipo_select" name="marcaeq" required>
+                            <option value="">Seleccione una marca</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modeloeq" class="form-label">Modelo</label>
+                        <input type="text" class="form-control" id="modeloeq" name="modeloeq" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="guardarModelo">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarEliminarModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro que desea eliminar este modelo?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmarEliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/modelosequipo.js' %}"></script>
+<script src="{% static 'js/texto_formateador.js' %}"></script>
+{% endblock %}

@@ -4,8 +4,8 @@ from django.views import View
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from .models import TipoEquipo, MarcaEquipo
-from .forms import TipoEquipoForm, MarcaEquipoForm
+from .models import TipoEquipo, MarcaEquipo, ModeloEquipo
+from .forms import TipoEquipoForm, MarcaEquipoForm, ModeloEquipoForm
 # Create your views here.
 
 # Vistas de tipos de equipos (CRUD)
@@ -108,4 +108,56 @@ class MarcaEquipoUpdateView(UpdateView):
             return self.form_valid(form)
         else:
             return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+
+class ModeloEquipoCreateView(CreateView, ListView):
+    model = ModeloEquipo
+    form_class = ModeloEquipoForm
+    template_name = 'modeloequipolist.html'
+    context_object_name = 'modelos'
+    success_url = reverse_lazy('modeloequipo_create')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tipos_equipos'] = TipoEquipo.objects.all()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+
+class ModeloEquipoUpdateView(UpdateView):
+    model = ModeloEquipo
+    form_class = ModeloEquipoForm
+    success_url = reverse_lazy('modeloequipo_create')
+
+    def post(self, request, *args, **kwargs):
+        modelo = get_object_or_404(ModeloEquipo, pk=kwargs['pk'])
+        form = self.get_form()
+        if form.is_valid():
+            modelo.tipoeq = form.cleaned_data['tipoeq']
+            modelo.marcaeq = form.cleaned_data['marcaeq']
+            modelo.modeloeq = form.cleaned_data['modeloeq']
+            modelo.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+
+class ModeloEquipoDeleteView(DeleteView):
+    model = ModeloEquipo
+    success_url = reverse_lazy('modeloequipo_create')
+
+    def post(self, request, *args, **kwargs):
+        modelo = get_object_or_404(ModeloEquipo, pk=kwargs['pk'])
+        modelo.delete()
+        return JsonResponse({'success': True})
+
+class ObtenerMarcasPorTipoView(View):
+    def get(self, request, tipo_id):
+        marcas = MarcaEquipo.objects.filter(tipoeq__id=tipo_id)
+        marcas_data = [{'id': marca.id, 'nombre': marca.marcaeq} for marca in marcas]
+        return JsonResponse({'marcas': marcas_data})
     
