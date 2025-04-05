@@ -14,7 +14,7 @@ class TipoEquipoListView(CreateView, ListView):
     form_class = TipoEquipoForm
     template_name = 'tipoequipolist.html'
     context_object_name = 'equipos'
-    success_url = reverse_lazy('tipoequipo_list')
+    success_url = reverse_lazy('tipoequipo_create')
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -27,7 +27,7 @@ class TipoEquipoListView(CreateView, ListView):
 class TipoEquipoUpdateView(UpdateView):
     model = TipoEquipo
     form_class = TipoEquipoForm
-    success_url = reverse_lazy('tipoequipo_list')
+    success_url = reverse_lazy('tipoequipo_create')
 
     def post(self, request, *args, **kwargs):
         equipo = get_object_or_404(TipoEquipo, pk=kwargs['pk'])
@@ -38,7 +38,7 @@ class TipoEquipoUpdateView(UpdateView):
 
 class TipoEquipoDeleteView(DeleteView):
     model = TipoEquipo
-    success_url = reverse_lazy('tipoequipo_list')
+    success_url = reverse_lazy('tipoequipo_create')
 
     def post(self, request, *args, **kwargs):
         equipo = get_object_or_404(TipoEquipo, pk=kwargs['pk'])
@@ -108,6 +108,15 @@ class MarcaEquipoUpdateView(UpdateView):
             return self.form_valid(form)
         else:
             return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+
+class MarcaEquipoDeleteView(DeleteView):
+    model = MarcaEquipo
+    success_url = reverse_lazy('marcaequipo_create')
+
+    def post(self, request, *args, **kwargs):
+        marca = get_object_or_404(MarcaEquipo, pk=kwargs['pk'])
+        marca.delete()
+        return JsonResponse({'success': True})
 
 class ModeloEquipoCreateView(CreateView, ListView):
     model = ModeloEquipo

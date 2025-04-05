@@ -74,8 +74,31 @@ $(document).ready(function () {
         const marcaId = $(this).data('id');
         if (!marcaId) {
             console.error("El ID de la marca no está disponible.");
-            return;
         }
         handleFormSubmit($(this), '/maq_settings/editar_marca/' + marcaId + '/', '#editModal');
+    });
+
+    // Mostrar ID del registro a eliminar en el modal
+    $(".delete-btn").click(function () {
+        $("#delete-id").val($(this).data("id"));
+    });
+
+    // Confirmar eliminación con AJAX
+    $("#confirm-delete").click(function () {
+        let id = $("#delete-id").val();
+        let csrf_token = $("input[name=csrfmiddlewaretoken]").val();
+
+        $.ajax({
+            url: '/maq_settings/eliminar_marca/' + id + '/',
+            type: "POST",
+            data: { csrfmiddlewaretoken: csrf_token },
+            success: function (response) {
+                $("#deleteModal").modal("hide");
+                location.reload();
+            },
+            error: function () {
+                alert("Error al eliminar la marca.");
+            }
+        });
     });
 });
