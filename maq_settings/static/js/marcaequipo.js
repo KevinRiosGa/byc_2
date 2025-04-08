@@ -75,7 +75,7 @@ $(document).ready(function () {
         if (!marcaId) {
             console.error("El ID de la marca no está disponible.");
         }
-        handleFormSubmit($(this), '/maq_settings/editar_marca/' + marcaId + '/', '#editModal');
+        handleFormSubmit($(this), '/maq_settings/marcaequipo/' + marcaId + '/editar/', '#editModal');
     });
 
     // Mostrar ID del registro a eliminar en el modal
@@ -89,7 +89,7 @@ $(document).ready(function () {
         let csrf_token = $("input[name=csrfmiddlewaretoken]").val();
 
         $.ajax({
-            url: '/maq_settings/eliminar_marca/' + id + '/',
+            url: '/maq_settings/marcaequipo/' + id + '/eliminar/',
             type: "POST",
             data: { csrfmiddlewaretoken: csrf_token },
             success: function (response) {
@@ -101,4 +101,4 @@ $(document).ready(function () {
             }
         });
     });
-});
+}); 
