@@ -11,9 +11,14 @@
 <div class="container mt-4">
     <h2>Gestión modelos</h2><br>
 
-    <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modeloModal">
-        Crear Modelo
-    </button>
+    
+    <div class="d-flex mb-3">
+        <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modeloModal">Crear Modelo</button>
+        <div class="ms-auto">
+            <a class="btn btn-warning" href="{% url 'tipoequipo_create' %}" role="button">Ir a tipos de equipos...</a>
+            <a class="btn btn-warning" href="{% url 'marcaequipo_create' %}" role="button">Ir a marcas...</a>
+        </div>
+    </div>
     <table id="modelosTable" class="display table table-striped">
         <thead>
             <tr>

@@ -11,8 +11,14 @@
     <h2>Gestión tipos de equipos</h2><br>
         
     <!-- Botón para abrir el modal de creación -->
-    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#crearModal">Crear tipo de equipo</button>
-
+    
+    <div class="d-flex mb-3">
+        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#crearModal">Crear tipo de equipo</button>
+        <div class="ms-auto">
+            <a class="btn btn-warning" href="{% url 'marcaequipo_create' %}" role="button">Ir a marcas...</a>
+            <a class="btn btn-warning" href="{% url 'modeloequipo_create' %}" role="button">Ir a modelos...</a>
+        </div>
+    </div>
     <!-- Tabla con los tipos de equipos -->
     <table id="equiposTable" class="display table table-striped">
         <thead>

@@ -42,46 +42,4 @@ class ModeloEquipo(models.Model):
             models.UniqueConstraint(fields=['tipoeq', 'marcaeq', 'modeloeq'], name='unique_tipoeq_marcaeq_modeloeq')
         ]
 
-class EstadoEquipo(models.Model):
-    estadoeq = models.CharField(max_length=100, null=False, blank=False)
 
-    def __str__(self):
-        return f"{self.estadoeq}"
-    
-    class Meta:
-        ordering = ['estadoeq']
-        verbose_name = 'Estado'
-        verbose_name_plural = 'Estados'
-
-class TipoMttoEquipo(models.Model):
-    tipomttoeq = models.CharField(max_length=100, null=False, blank=False)
-
-    def __str__(self):
-        return f"{self.tipomttoeq}"
-    
-    class Meta:
-        ordering = ['tipomttoeq']
-        verbose_name = 'Tipo de mantenimiento'
-        verbose_name_plural = 'Tipos de mantenimiento'
-
-class EstadoTareaOT(models.Model):
-    estadotareaot = models.CharField(max_length=100, null=False, blank=False)
-
-    def __str__(self):
-        return f"{self.estadotareaot}"
-    
-    class Meta:
-        ordering = ['estadotareaot']
-        verbose_name = 'Estado de tarea'
-        verbose_name_plural = 'Estados de tarea'
-
-class EstadoOT(models.Model):
-    estadoot = models.CharField(max_length=100, null=False, blank=False)
-
-    def __str__(self):
-        return f"{self.estadoot}"
-    
-    class Meta:
-        ordering = ['estadoot']
-        verbose_name = 'Estado de OT'
-        verbose_name_plural = 'Estados de OT'

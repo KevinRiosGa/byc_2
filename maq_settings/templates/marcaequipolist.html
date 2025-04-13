@@ -11,8 +11,15 @@
     <h2>Gestión marcas</h2><br>
         
     <!-- Botón para abrir el modal de creación -->
-    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#crearModal">Crear marca</button>
-
+    
+    <div class="d-flex mb-3">
+        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#crearModal">Crear marca</button>
+        <div class="ms-auto">
+            <a class="btn btn-warning" href="{% url 'modeloequipo_create' %}" role="button">Ir a modelos...</a>
+            <a class="btn btn-warning" href="{% url 'tipoequipo_create' %}" role="button">Ir a tipos de equipos...</a>
+        </div>
+    </div>
+    
     <!-- Tabla con los tipos de equipos -->
     <table id="marcasTable" class="display table table-striped">
         <thead>
