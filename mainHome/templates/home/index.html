@@ -72,8 +72,15 @@
                             <a class="nav-link text-dark" href="{% url 'tipoequipo_create' %}">Tipos de equipos</a>
                             <a class="nav-link text-dark" href="{% url 'marcaequipo_create' %}">Marcas</a>
                             <a class="nav-link text-dark" href="{% url 'modeloequipo_create' %}">Modelos</a>
-                            <a class="nav-link text-dark" href="#">Secciones</a>
-                            <a class="nav-link text-dark" href="#">Reparaciones</a>
+                            <button class="btn w-100 text-start text-dark d-flex align-items-center gap-2" data-bs-toggle="collapse" data-bs-target="#sidebarSettings_2" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.615 20H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8m-3 5l2 2l4-4M9 8h4m-4 4h2"/></svg>
+                                Fichas técnicas
+                                <i class="bi bi-chevron-down ms-auto"></i>
+                            </button>
+                        </div>
+                        <div id="sidebarSettings_2" class="collapse ps-4">
+                            <a class="nav-link text-dark" href="{% url 'seccionespecificacion_create' %}">Secciones</a>
+                            <a class="nav-link text-dark" href="{% url 'especificacion_create' %}">Especificaciones</a> 
                         </div>
 
                         

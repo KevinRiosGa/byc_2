@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from .models import TipoEquipo, MarcaEquipo, ModeloEquipo
+from .models import TipoEquipo, MarcaEquipo, ModeloEquipo, SeccionEspecificacion, Especificacion
 from django.core.exceptions import ValidationError
 
 class TipoEquipoForm(forms.ModelForm):
@@ -104,4 +104,44 @@ class ModeloEquipoForm(forms.ModelForm):
                         return cleaned_data
                 
         return cleaned_data  
-         
+
+class SeccionEspecificacionForm(forms.ModelForm):
+    class Meta:
+        model = SeccionEspecificacion
+        fields = ['seccion']
+        labels = {'seccion': 'Sección'}
+        widgets = {'seccion': forms.TextInput(attrs={'class': 'form-control'})}
+
+class EspecificacionForm(forms.ModelForm):
+    class Meta:
+        model = Especificacion
+        fields = ['seccion', 'especificacion']
+        widgets = {
+            'seccion': forms.Select(attrs={'class': 'form-control'}),
+            'especificacion': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+class EspecificacionEditForm(forms.ModelForm):
+    DELETE = forms.BooleanField(required=False, widget=forms.HiddenInput())
+
+    class Meta:
+        model = Especificacion
+        fields = ['seccion', 'especificacion']
+        widgets = {
+            'seccion': forms.Select(attrs={'class': 'form-control', 'disabled': 'disabled'}),
+            'especificacion': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+EspecificacionFormSet = forms.formset_factory(
+    EspecificacionForm,
+    extra=1,
+    can_delete=True
+)
+
+SeccionEspecificacionFormSet = inlineformset_factory(
+    SeccionEspecificacion,
+    Especificacion,
+    form=EspecificacionForm,
+    extra=1,
+    can_delete=True
+)

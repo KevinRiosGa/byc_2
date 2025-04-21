@@ -23,9 +23,9 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Tipo</th>
-                <th>Marca</th>
                 <th>Modelo</th>
+                <th>Marca</th>
+                <th>Tipo</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -33,9 +33,9 @@
             {% for modelo in modelos %}
             <tr>    
                 <td>{{ modelo.id }}</td>
-                <td>{{ modelo.tipoeq.tipoeq }}</td>
-                <td>{{ modelo.marcaeq.marcaeq }}</td>
                 <td>{{ modelo.modeloeq }}</td>
+                <td>{{ modelo.marcaeq.marcaeq }}</td>
+                <td>{{ modelo.tipoeq.tipoeq }}</td>
                 <td>
                     <button class="btn btn-primary btn-sm edit-btn" 
                             data-bs-toggle="modal" 

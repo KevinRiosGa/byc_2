@@ -42,4 +42,26 @@ class ModeloEquipo(models.Model):
             models.UniqueConstraint(fields=['tipoeq', 'marcaeq', 'modeloeq'], name='unique_tipoeq_marcaeq_modeloeq')
         ]
 
+class SeccionEspecificacion(models.Model):
+    seccion = models.CharField(max_length=150, null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.seccion}"
+    
+    class Meta:
+        ordering = ['seccion']
+        verbose_name = 'Sección'
+        verbose_name_plural = 'Secciones'
+        
+class Especificacion(models.Model):
+    seccion = models.ForeignKey(SeccionEspecificacion, on_delete=models.PROTECT, null=False, blank=False)
+    especificacion = models.CharField(max_length=150, null=False, blank=False)
+
+    def __str__(self):
+        return f"{self.especificacion}"
+    
+    class Meta:
+        ordering = ['especificacion']
+        verbose_name = 'Especificación'
+        verbose_name_plural = 'Especificaciones'
 

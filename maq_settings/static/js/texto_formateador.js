@@ -51,8 +51,8 @@ function aplicarFormateo(elemento) {
     });
 }
 
-// Aplicar formateo a todos los campos de texto cuando el documento esté listo
-document.addEventListener('DOMContentLoaded', function() {
+// Función para aplicar formateo a todos los campos de texto
+function aplicarFormateoATodosLosCampos() {
     // Seleccionar todos los campos de texto en formularios
     const camposTexto = document.querySelectorAll('input[type="text"], textarea');
     
@@ -60,4 +60,24 @@ document.addEventListener('DOMContentLoaded', function() {
     camposTexto.forEach(campo => {
         aplicarFormateo(campo);
     });
+}
+
+// Aplicar formateo a todos los campos cuando el documento esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    aplicarFormateoATodosLosCampos();
+});
+
+// Observar cambios en el DOM para aplicar formateo a nuevos campos
+const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        if (mutation.addedNodes.length) {
+            aplicarFormateoATodosLosCampos();
+        }
+    });
+});
+
+// Configurar el observador
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
 }); 
