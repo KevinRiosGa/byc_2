@@ -88,7 +88,8 @@ $(document).ready(function () {
     });
 
     // Función para agregar un nuevo formulario
-    function addForm() {
+    function 
+    addForm() {
         const formCount = $('.formset-form').length;
         const template = $('.formset-form:first').clone();
         
