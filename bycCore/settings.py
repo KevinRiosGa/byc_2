@@ -33,9 +33,10 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'mainHome',
-    'rrhh_personal',
     'mainLogin',
+    'gen_settings',
     'maq_settings',
+    'rrhh_personal',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
